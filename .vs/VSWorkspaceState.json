@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SeleniumRecorder",
+    "\\SeleniumRecorder\\wwwroot",
+    "\\SeleniumRecorder\\wwwroot\\js"
   ],
-  "SelectedNode": "\\SeleniumRecorder.sln",
+  "SelectedNode": "\\SeleniumRecorder\\wwwroot\\js\\tool.js",
   "PreviewInSolutionExplorer": false
 }
