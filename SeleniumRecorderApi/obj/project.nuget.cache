@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5xTOe7mnz4uCJoN722eO3K8oIpRes0+PqWjpZ4Gy0IuZE+CrTGs9/pwCn3Sf86Qap+iNvd684n3uBgJpAxoxqw==",
+  "dgSpecHash": "bhyUhVl9ECXq2Wm2nTFf0WWy4r6Tkl8q8d5OY3KNtYvZDHLUUFV3DKtdHFxPlw1pHuki0R/TdqrBoOJrUi5RkQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\brand\\source\\repos\\troymartin39\\SeleniumRecorderApi\\SeleniumRecorderApi\\SeleniumRecorderApi.csproj",
+  "projectFilePath": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorderApi\\SeleniumRecorderApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brand\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\brand\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
