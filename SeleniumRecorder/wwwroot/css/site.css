@@ -1,0 +1,117 @@
+.box {
+    width: 100%;
+}
+
+img {
+    width: 100%;
+    /* takes the 100 % width of its container (.box div)*/
+    height: 100%;
+    /* takes the 100 % height of its container (.box div)*/
+}
+
+/* Hide the navbar by default */
+/* Hide the scroll element by default */
+.scroll-element {
+    display: none;
+}
+
+    /* Display the scroll element when user scrolls */
+    .scroll-element.visible {
+        display: block;
+    }
+
+.hidden {
+    display: none;
+}
+
+@keyframes hammer {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    30% {
+        transform: rotate(-30deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    80% {
+        transform: rotate(15deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.bi-hammer {
+    animation: hammer 1s ease-in-out;
+    animation-iteration-count: 2;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.02);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes raindrop-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes raindrop-fade {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.animated-raindrop {
+    animation: raindrop-pulse 1s infinite, raindrop-fade 4s infinite;
+}
+
+.button-click-animation {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .button-click-animation:active {
+        transform: translateY(5px);
+        box-shadow: 0 0 0 0.80rem rgba(0, 0, 0, 0.1);
+    }

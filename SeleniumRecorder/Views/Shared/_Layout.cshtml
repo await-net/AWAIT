@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<!--BOOTSTRAP-THEME-DARK-->
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!--META-TAGS-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--TITLE-->
+    <title>@ViewData["Title"] - AWAIT</title>
+    <!--BOOTSTRAP-STYLE-SHEET-LIBMAN-ROOT-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!--CUSTOM-STYLE-SHEET-->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!--UNKNOWN-MAYBE-API?-->
+    <link rel="stylesheet" href="~/SeleniumRecorder.styles.css" asp-append-version="true" />
+    <!--WEB-FONT-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <!--LORD-ICONS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <!--BOOTSTRAP-STYLE-SHEET-5.3.0-CDN-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+<body class="p-3 m-0 border-0">
+    <!--HEADER-CONTAINER-->
+    <header>        
+        <div class="container-fluid">
+            <!--STICKY NAV-BAR(NOT INPLEMENTED)-->
+            <div class="scroll-element sticky-top">
+            </div>
+            <!--TOP-BAR-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex gap-2 align-items-center justify-content-end">
+                        <button type="button" class="btn btn-outline-primary">
+                            Account
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z">
+                                </path>
+                                <path fill-rule="evenodd"
+                                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-success">
+                            Assistance
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z">
+                                </path>
+                                <path fill-rule="evenodd"
+                                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger">
+                            Logout
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z">
+                                </path>
+                                <path fill-rule="evenodd"
+                                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-12">
+                    <hr>
+                </div>
+            </div>
+            <!--BOTTOM-BAR-->
+            <div class="row align-items-center">
+                <!--LOGO-->
+                <div class="col-lg-1 col-md-3 col-12">
+                    <a href="/">
+                        <img src="~/media/logo-removebg.png" class="img-fluid"
+                             alt="Logo">
+                    </a>                    
+                </div>
+                <!--COMPANY NAME-->
+                <div class="col-lg-6 col-md-col-6 col-12">
+                    <h2>
+                        Automated<br>
+                        <small class="text-body-secondary font-monospace"> Web Application Integrated Testing</small>
+                    </h2>
+                </div>
+                <!--NAV-BAR-->
+                <div class="col-lg-5 col-md-col-6 col-12">
+                    <nav class="navbar navbar-expand-lg bg-body-primary p-2">
+                        <!--DROP DOWN BUTTON-->
+                        <button id="dropdownBtn" class="navbar-toggler btn btn-secondary" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#mainNavBar" aria-controls="mainNavBar"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-bar-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z" />
+                            </svg>
+                        </button>
+                        <!--DROP DOWN MENU-->
+                        <div class="collapse navbar-collapse justify-content-right" id="mainNavBar">
+                            <ul class="navbar-nav nav-underline nav-fill">
+                                <li class="nav-item">
+                                    <a id="dashboardNav" class="nav-link" aria-current="page" href="@Url.Action("", "dashboard")">AWAIT Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="toolboxNav" class="nav-link" href="@Url.Action("toolbox", "dashboard")">AWAIT Toolbox</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="settingsNav" class="nav-link" href="href=" @Url.Action("", "dashboard")"">Settings</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </header>
+    <!--BODY-CONTAINER-->
+    <div class="container-fluid p-2 mb-3">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!--FOOTER-CONTAINER-->
+    <footer class="bg-dark text-body-secondary">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12">
+                    <div class="d-flex flex-column" style="height:100%;">
+                        <div class="row p-2 mb-3 border border-secondary-subtle">
+                            <div class="col-4">
+                                <img src="/media/logo-removebg.png" class="img-fluid" alt="logo-footer">
+                            </div>
+                            <div class="col-8">
+                                <figure class="p-2">
+                                    <blockquote class="blockquote text-light-emphasis">
+                                        <p><i class="bi bi-asterisk"></i> Bespoke Automated Testing Solutions</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer text-secondary-emphasis">
+                                        <p class="lead text-secondary-emphasis">
+                                            Comprehensive, Adaptable & Rapid Custom Automated Testing Solutions Designed Around Your IT Infrastructure!
+                                        </p>
+                                        <h5 class="text-secondary-emphasis"><i class="bi bi-telephone-outbound-fill text-light-emphasis"></i> CONTACT US</h5>
+                                        Email - <cite title="Source Title"><a href="#" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">info@example.com</a></cite><br>
+                                        Office Phone - <cite title="Source Title"><a href="#" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">123-456-7890</a></cite>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="d-flex flex-column" style="height:100%;">
+                        <figure class="text-center p-2">
+                            <blockquote class="blockquote">
+                                <p class="h4 text-light-emphasis">About</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer text-center">
+                                <p class="lead text-secondary-emphasis">
+                                    Our expertise lies in streamlining QA processes for websites, web applications, and complex systems. With a focus on data privacy and security, we ensure the confidentiality of your information. Partner with us for efficient and reliable testing, driven by cutting-edge technologies and industry best practices. Contact us today to propel your IT infrastructure to new heights.
+                                </p>
+                                <div class="text-end">
+                                    <u>Disclaimer</u> - <cite title="Source Title">This is a prototype, most functionalities are still being developed.</cite>
+                                </div>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-md-6 col-6 text-start">
+                    &copy; 2023 AWAIT. All rights reserved.
+                </div>
+                <div class="col-md-6 col-6 text-end">
+                    Your Privacy Matters - <a href="Home/Privacy" class="text-reset link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--BOOTSTRAP-JAVA-SCRIPT-5.3.0-CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <!--Chart-JS-CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <!--JQUERY-CDN-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--JQUERY-JAVA-SCRIPT-LIBMAN-ROOT-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!--BOOTSTRAPS-JAVA-SCRIPT-LIBMAN-ROOT
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
+    <!--CUSTOM-JAVA-SCRIPT-->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\brand\Source\Repos\troymartin39\SeleniumRecorderApi\SeleniumRecorder\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2023-06-07T09:37:38.5350634Z;True|2023-06-07T11:20:38.6060169+02:00;True|2023-06-04T01:11:11.6596296+02:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "7yk3ISwuvW5byIGbj2L/RIlCodYSbEVCUi1NJPHQSqc=",
+  "Source": "SeleniumRecorderApi",
+  "BasePath": "_content/SeleniumRecorderApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

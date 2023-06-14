@@ -1,0 +1,485 @@
+﻿@{
+    ViewData["Title"] = "ToolBox";
+}
+<style>
+    /* CSS animation for typing effect */
+    @@keyframes typing {
+        from {
+            width: 0;
+        }
+    }
+
+    /* CSS animation for backspace effect */
+    @@keyframes backspace {
+        to {
+            width: 0;
+        }
+    }
+
+    /* CSS animation for console cursor */
+    @@keyframes blink {
+        50% {
+            background-color: transparent;
+        }
+    }
+
+    /* Console output and cursor styling */
+    .console-output {
+        display: inline-block;
+        background-color: black;
+        color: lime;
+        font-family: monospace;
+        /*padding: 4px;*/
+    }
+
+    .console-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 16px;
+        background-color: lime;
+        animation: blink 1s infinite;
+    }
+
+    .animated-card {
+        animation-name: cardPopUp;
+        animation-duration: 1s;
+        animation-timing-function: ease-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @@keyframes cardPopUp {
+        0% {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .card.hidden {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .card.visible {
+        opacity: 1;
+    }
+</style>
+<!--TOOLBOX-->
+<div class="container-fluid p-2 mb-3" id="toolBox">
+    <!--TOOL-LOAD-SELECTION-->
+    <div class="row text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle">
+        <!--TOOLBOX-HEADING-->
+        <div class="col-12 bg-dark-subtle border-bottom border-light-subtle opacity-10">
+            <div class="row d-flex align-items-center">
+                <!--TOOLBOX-HEADING-LEFT-->
+                <div class="col">
+                    <p class="h2 p-1 text-light-emphasis d-flex align-items-center justify-content-start">
+                        TOOLBOX
+                        <span class="p-2 text-end">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                                 class="bi bi-hammer" viewBox="0 0 16 16">
+                                <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5.009 5.009 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334z" />
+                            </svg>
+                        </span>
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="text-center pulse-animation collapse show" id="promptLoadTool">
+                        <h1 class="display-8">Click Load Tool...</h1>
+                    </div>
+                </div>
+                <!--TOOLBOX-HEADING-RIGHT-->
+                <div class="col">
+                    <p class="h4 text-secondary-emphasis d-flex flex-row align-items-center justify-content-end">
+                        IDR SUIT
+                        <span class="p-2">
+                            <i class="bi bi-stack"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--TOOLBOX-LOAD-SELECTION-->
+        <div class="row gap-2">
+            <div class="col card-column">
+                <!--RECORDING-TOOL-->
+                <div class="col-12 p-2">
+                    <!--RECORDING-TOOL-CARD-->
+                    <div class="card animated-card hidden">
+                        <h4 class="card-header bg-info-subtle text-white">RECORDER</h4>
+                        <div class="card-body bg-dark-subtle text-emphasis-dark">
+                            <h6 class="card-title">Record, Benchmark & Run Playback</h6>
+                            <p class="card-text">
+                                Record a new playback used to <em>Automate</em> your testing
+                                processes.
+                            </p>
+                        </div>
+                        <div class="card-footer bg-dark text-emphasis-dark">
+                            <div class="row g-3">
+                                <div class="btn-group align-items-end" role="group" aria-label="recorderTool"
+                                     style="margin-bottom:0;">
+                                    <button href="#recorderTool" type="button" class="btn btn-outline-success"
+                                            data-bs-toggle="collapse" data-bs-target="#recorderTool"
+                                            aria-controls="recorderTool" aria-expanded="false" aria-label="recorderTool"
+                                            id="recordLoad">
+                                        <i class="bi bi-box-arrow-in-down"></i> Load Tool
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--RECORDING-TOOL-CONTENT-->
+                    <div class="collapse" id="recorderTool">
+                        <div class="row p-2">
+                            <!--RECORDER-HEADING-->
+                            <div class="col-12 p-2">
+                                <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-center">
+                                    <p class="h5 p-2 text-center">Recording Tool Loaded!</p>
+                                </div>
+                            </div>
+                            <!--RECORDER-TAB-NAVIGATION-->
+                            <div class="col-12">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a href="#0" class="nav-link active" data-bs-toggle="tab" data-bs-target="#record"
+                                           aria-controls="record" aria-selected="false">Start Recording</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#playback"
+                                           aria-controls="playback" aria-selected="false">Recorder Configuration</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <!--RECORDER-TAB-CONTENT-->
+                                <div class="tab-content p-2">
+                                    <div class="tab-pane fade show active" id="record">
+                                        <!--RECORDER-HEADING-->
+                                        <div class="text-body-secondary p-2">
+                                            <p class="h5">
+                                                Test Suit Recorder
+                                            </p>
+                                            <figure>
+                                                <blockquote class="blockquote">
+                                                </blockquote>
+                                                <figcaption class="blockquote-footer">
+                                                    <p class="lead h5">
+                                                        Record Interactions<br>
+                                                        <small class="text-body-secondary">
+                                                            Start recorder to record events based on
+                                                            your interactions with targeted website or webpage.
+                                                        </small>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                        <!--RECORDER-BODY-->
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <span>
+                                                    <small>Starting Address</small>
+                                                </span>
+                                                <p class="h4 text-secondary-emphasis d-flex flex-row align-items-center justify-content-end">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" aria-label="target"
+                                                               id="newURLValue" placeholder="Enter website address..."
+                                                               value="https://www.wootware.co.za/">
+                                                        <button type="button" id="setNewURL"
+                                                                class="btn btn-outline-danger button-click-animation align-items-center justify-content-start"
+                                                                data-bs-toggle="button" aria-pressed="false"
+                                                                onclick="toggleWebDriver()">
+                                                            <small>RECORD</small>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                 fill="currentColor"
+                                                                 class="bi bi-record-circle animated-raindrop"
+                                                                 viewBox="0 0 16 16">
+                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
+                                    <div class="tab-content p-2">
+                                        <div class="tab-pane fade show" id="config">
+                                            <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--PLAYBACK-TOOL-->
+                <div class="col-12 p-2">
+                    <!--PLAYBACK-TOOL-CARD-->
+                    <div class="card animated-card hidden">
+                        <h4 class="card-header bg-info-subtle text-white">PLAYBACK</h4>
+                        <div class="card-body bg-dark-subtle text-emphasis-dark">
+                            <h6 class="card-title">Manage & Interact With Your Playback</h6>
+                            <p class="card-text">
+                                Discover New Issues, Generate Fresh Reports or Test New Features with Old Infrastucuture. Use Playbacks to <em>Automate</em> Your Testing & QA
+                                Processes!
+                            </p>
+                        </div>
+                        <div class="card-footer bg-dark text-emphasis-dark">
+                            <div class="row g-3">
+                                <div class="btn-group align-items-end" role="group" aria-label="playbackTool"
+                                     style="margin-bottom:0;">
+                                    <button href="#playbackTool" type="button" class="btn btn-outline-success"
+                                            data-bs-toggle="collapse" data-bs-target="#playbackTool"
+                                            aria-controls="playbackTool" aria-expanded="false" aria-label="playbackTool"
+                                            id="playbackLoad">
+                                        <i class="bi bi-box-arrow-in-down"></i> Load Tool
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--PLAYBACK-TOOL-CONTENT-->
+                    <div class="collapse" id="playbackTool">
+                        <div class="row p-2">
+                            <!--PLAYBACK-HEADING-->
+                            <div class="text-body-secondary">
+                                <p class="h5 p-2">
+                                    Suit Playbacks
+                                </p>
+                                <figure>
+                                    <blockquote class="blockquote">
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer">
+                                        <p class="lead h5">
+                                            Manage Recorded Playbacks<br>
+                                            <small class="text-body-secondary">
+                                                <ul class="list-unstyled">
+                                                    <ul>
+                                                        <li>Run recorded playbacks</li>
+                                                        <li>View events & playback details</li>
+                                                        <li>Remove a recorded playback</li>
+                                                    </ul>
+                                                </ul>
+                                            </small>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <!--PLAYBACK-BODY-->
+                            <div class="list-group list-group-flush">
+                                <a data-bs-toggle="collapse" href="#defaultsuitplayback" role="button"
+                                   aria-expanded="false" aria-controls="defaultsuitplayback"
+                                   class="list-group-item list-group-item-action">
+                                    <span class="lead font-monospace">IDR Login Playback </span><span class="navbar-toggler-icon"></span>
+                                </a>
+                                <div class="collapse multi-collapse p-1" id="defaultsuitplayback">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button" id="idrLoginPlay" 
+                                                    class="btn btn-outline-primary button-click-animation align-items-center justify-content-start"
+                                                    onclick="@Url.Action("Playback","Dashboard")">
+                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
+                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
+                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+                                <a data-bs-toggle="collapse" href="#customSuitplayback" role="button"
+                                   aria-expanded="false" aria-controls="customSuitplayback"
+                                   class="list-group-item list-group-item-action">
+                                    <span class="lead font-monospace">Custom Suit Playback </span><span class="navbar-toggler-icon"></span>
+                                </a>
+                                <div class="collapse multi-collapse p-1" id="customSuitplayback">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary button-click-animation align-items-center justify-content-start">
+                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
+                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
+                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a data-bs-toggle="collapse" href="#otherSuitplayback" role="button"
+                                   aria-expanded="false" aria-controls="otherSuitplayback"
+                                   class="list-group-item list-group-item-action">
+                                    <span class="lead font-monospace">Other Suit Playback </span><span class="navbar-toggler-icon"></span>
+                                </a>
+                                <div class="collapse multi-collapse p-1" id="otherSuitplayback">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary button-click-animation align-items-center justify-content-start">
+                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
+                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex p-2 align-items-center justify-content-center">
+                                                <button type="button"
+                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
+                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-3 mb-2 bg-black text-white">
+                <!--CONSOLE-CARD-->
+                <div class="row">
+                    <!--RECORDER-HEADING-->
+                    <div class="col-12 p-2">
+                        <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-center">
+                            <p class="h5 p-2 text-center">CONSOLE OUTPUT</p>
+                        </div>
+                    </div>
+                    <!--RECORDER-TAB-NAVIGATION-->
+                    <div class="col-12 bg-black">
+                        <div class="console-output"></div>
+                        <span class="console-cursor"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-primary" id="playbackNotify">Show live toast</button>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded me-2" alt="...">
+            <strong class="me-auto">Playback Tool</strong>
+            <small>Just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            IDR Login Playback has started...
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var delay = 500;
+        $('.card').each(function (index) {
+            var card = $(this);
+            setTimeout(function () {
+                card.removeClass('hidden').addClass('visible');
+            }, index * delay);
+        });
+    });
+
+
+    const consoleOutput = document.querySelector('.console-output');
+    const consoleCursor = document.querySelector('.console-cursor');
+    const texts = ['Hello World!', 'AWAIT - Your Automated QA Solution!', '@ViewBag.Console'];
+    let index = 0;
+
+    // Animate typing effect
+    function typeText(text) {
+        const characters = text.split('');
+        let delay = 0;
+
+        characters.forEach((char, i) => {
+            delay += 100; // Interval for typing
+
+            setTimeout(() => {
+                consoleOutput.textContent += char;
+                updateCursorPosition();
+            }, delay);
+        });
+
+        setTimeout(() => {
+            backspaceText(text);
+        }, delay + 1000);
+    }
+
+    // Animate backspacing effect
+    function backspaceText(text) {
+        const characters = text.split('');
+        let delay = 0;
+
+        characters.forEach((char, i) => {
+            delay += 50;
+
+            setTimeout(() => {
+                consoleOutput.textContent = consoleOutput.textContent.slice(0, -1);
+                updateCursorPosition();
+            }, delay);
+        });
+
+        setTimeout(() => {
+            index = (index + 1) % texts.length;
+            typeText(texts[index]);
+        }, delay + 500);
+    }
+
+    // Update console cursor position
+    function updateCursorPosition() {
+        const consoleText = consoleOutput.textContent;
+        const consoleTextLength = consoleText.length;
+
+        if (consoleTextLength === 0) {
+            consoleCursor.style.marginLeft = '0';
+        } else {
+            const lastCharacter = consoleOutput.childNodes[consoleTextLength - 1];
+            const rect = lastCharacter.getBoundingClientRect();
+            const marginLeft = rect.right + 'px';
+            consoleCursor.style.marginLeft = marginLeft;
+        }
+    }
+
+    // Start printing text once loaded
+    window.addEventListener('DOMContentLoaded', () => {
+        typeText(texts[index]);
+    });
+</script>
+@section Scripts {
+    <script src="~/js/tool.js" asp-append-version="true"></script>
+}

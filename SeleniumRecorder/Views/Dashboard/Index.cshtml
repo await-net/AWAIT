@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<!--DASHBOARD-->
+<div class="container-fluid p-2 mb-3">
+    <!--CHART-ROW-#0-->
+    <div class="row d-flex align-items-center text-emphasis-secondary bg-secondary-subtle border border-secondary-subtle">
+        <!--DASHBOARD-HEADING-LEFT-->
+        <div class="col-12 bg-dark-subtle opacity-10">
+            <div class="row d-flex align-items-center">
+                <div class="col">
+                    <p class="h2 p-1 text-light-emphasis d-flex align-items-center justify-content-start">
+                        AWAIT Dashboard
+                        <span class="p-2 text-end">
+                            <i class="bi bi-speedometer"></i>
+                        </span>
+                    </p>
+                </div>
+                <!--DASHBOARD-HEADING-RIGHT-->
+                <div class="col">
+                    <p class="h4 text-secondary-emphasis d-flex flex-row align-items-center justify-content-end">
+                        IDR SUIT
+                        <span class="p-2">
+                            <i class="bi bi-stack"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--BAR-CHART-->
+        <div class="col-lg-6 col-12 p-2 mb-0 border-top border-light-subtle border-secondary">
+            <!--//-->
+            <div class="row d-flex align-items-center">
+                <div class="col">
+                    <div class="chart-container">
+                        <canvas id="barChart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--POLAR-CHART-->
+        <div class="col-lg-6 col-12 p-2 mb-0 border-top border-start border-light-subtle border-secondary">
+            <div class="row d-flex align-items-center">
+                <div class="col">
+                    <div class="chart-container">
+                        <canvas id="polarChart" height="350"></canvas>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="col">
+                    <p class="font-monospace text-light-emphasis p-2 mb-0 ">
+                        SUIT TEST RATIO: <span class="fw-bold">0.5</span>
+                    </p>
+                    <div class="labels-container p-2 mb-0">
+                        <ol id="chartLabels" class="list-group">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--CHART-ROW-#1-->
+    <div class="row justify-content-start d-flex align-items-center text-emphasis-secondary bg-secondary-subtle border border-top border-secondary-subtle">
+        <!--RADAR-CHART-->
+        <div class="col-lg-3 col-12 border-bottom border-light-subtle border-secondary">
+            <div class="chart-container p-2">
+                <canvas id="radarChart" height="400"></canvas>
+            </div>
+        </div>
+        <!--LINE-CHART-->
+        <div class="col-lg-9 col-12 border-start border-bottom border-light-subtle border-secondary">
+            <div class="row d-flex align-items-center">
+                <div class="col">
+                    <div class="chart-container p-2">
+                        <canvas id="lineChart" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+@section Scripts {
+    <script src="~/js/charts.js" asp-append-version="true"></script>
+}
