@@ -37,6 +37,10 @@
       "PackagePath": "staticwebassets\\js\\charts.js"
     },
     {
+      "Id": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorder\\wwwroot\\js\\console.js",
+      "PackagePath": "staticwebassets\\js\\console.js"
+    },
+    {
       "Id": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorder\\wwwroot\\js\\recorderDocument.js",
       "PackagePath": "staticwebassets\\js\\recorderDocument.js"
     },

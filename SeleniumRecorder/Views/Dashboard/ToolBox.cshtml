@@ -187,11 +187,10 @@
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" aria-label="target"
                                                                id="newURLValue" placeholder="Enter website address..."
-                                                               value="https://www.wootware.co.za/">
-                                                        <button type="button" id="setNewURL"
+                                                               value="https://www.wootware.co.za/">                                                            
+                                                        <button type="button" id="toggleWebDriver"
                                                                 class="btn btn-outline-danger button-click-animation align-items-center justify-content-start"
-                                                                data-bs-toggle="button" aria-pressed="false"
-                                                                onclick="toggleWebDriver()">
+                                                                data-bs-toggle="button" aria-pressed="false">
                                                             <small>RECORD</small>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                                  fill="currentColor"
@@ -201,6 +200,11 @@
                                                                 <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                                                             </svg>
                                                         </button>
+                                                        <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                                                            <button type="button" class="btn btn-outline-success" id="startWebDriver">Start</button>
+                                                            <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
+                                                            <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
+                                                        </div>
                                                     </div>
                                                 </p>
                                             </div>
@@ -393,7 +397,7 @@
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
+            <img src="#" class="rounded me-2" alt="Playback">
             <strong class="me-auto">Playback Tool</strong>
             <small>Just now</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -405,81 +409,9 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        var delay = 500;
-        $('.card').each(function (index) {
-            var card = $(this);
-            setTimeout(function () {
-                card.removeClass('hidden').addClass('visible');
-            }, index * delay);
-        });
-    });
-
-
-    const consoleOutput = document.querySelector('.console-output');
-    const consoleCursor = document.querySelector('.console-cursor');
-    const texts = ['Hello World!', 'AWAIT - Your Automated QA Solution!', '@ViewBag.Console'];
-    let index = 0;
-
-    // Animate typing effect
-    function typeText(text) {
-        const characters = text.split('');
-        let delay = 0;
-
-        characters.forEach((char, i) => {
-            delay += 100; // Interval for typing
-
-            setTimeout(() => {
-                consoleOutput.textContent += char;
-                updateCursorPosition();
-            }, delay);
-        });
-
-        setTimeout(() => {
-            backspaceText(text);
-        }, delay + 1000);
-    }
-
-    // Animate backspacing effect
-    function backspaceText(text) {
-        const characters = text.split('');
-        let delay = 0;
-
-        characters.forEach((char, i) => {
-            delay += 50;
-
-            setTimeout(() => {
-                consoleOutput.textContent = consoleOutput.textContent.slice(0, -1);
-                updateCursorPosition();
-            }, delay);
-        });
-
-        setTimeout(() => {
-            index = (index + 1) % texts.length;
-            typeText(texts[index]);
-        }, delay + 500);
-    }
-
-    // Update console cursor position
-    function updateCursorPosition() {
-        const consoleText = consoleOutput.textContent;
-        const consoleTextLength = consoleText.length;
-
-        if (consoleTextLength === 0) {
-            consoleCursor.style.marginLeft = '0';
-        } else {
-            const lastCharacter = consoleOutput.childNodes[consoleTextLength - 1];
-            const rect = lastCharacter.getBoundingClientRect();
-            const marginLeft = rect.right + 'px';
-            consoleCursor.style.marginLeft = marginLeft;
-        }
-    }
-
-    // Start printing text once loaded
-    window.addEventListener('DOMContentLoaded', () => {
-        typeText(texts[index]);
-    });
+   
 </script>
 @section Scripts {
     <script src="~/js/tool.js" asp-append-version="true"></script>
+    <script src="~/js/console.js" asp-append-version="true"></script>
 }

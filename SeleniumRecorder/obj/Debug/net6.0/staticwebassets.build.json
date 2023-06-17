@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "B+J5u9/OXgTMIKHALk+26Tgao2sU/Eh1GA6jKMO4ylc=",
+  "Hash": "Dzhtbo24VpREyQsjHhEr+VTk5+um+TSe8P5/Uxxrt70=",
   "Source": "SeleniumRecorder",
   "BasePath": "_content/SeleniumRecorder",
   "Mode": "Default",
@@ -197,6 +197,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\charts.js"
+    },
+    {
+      "Identity": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorder\\wwwroot\\js\\console.js",
+      "SourceId": "SeleniumRecorder",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorder\\wwwroot\\",
+      "BasePath": "_content/SeleniumRecorder",
+      "RelativePath": "js/console.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\console.js"
     },
     {
       "Identity": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorder\\wwwroot\\js\\recorderDocument.js",

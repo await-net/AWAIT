@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SeleniumRecorder.Models;
+﻿using AWAIT.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace SeleniumRecorder.DAL
 {
@@ -7,8 +7,12 @@ namespace SeleniumRecorder.DAL
     {
         public AwaitDbContext(DbContextOptions<AwaitDbContext> options)
             : base(options) { }
-        // [DISABLED FOR MIGRATION PURPOSES] public DbSet<UserModel>? Users { get; set; }
-        public DbSet<WebElementDataModel>? WebElements { get; set; }
+        public DbSet<EventDataModel>? EventData { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EventDataModel>().ToTable("EventData");
+        }
 
     }
 }

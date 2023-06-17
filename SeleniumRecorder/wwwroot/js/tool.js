@@ -75,42 +75,66 @@ window.addEventListener('load', () => {
     });
 });
 $(document).ready(function () {
-    $("#setNewURL").click(function (e) {
+    $("#startWebDriver").click(function (e) {
         e.preventDefault();
+        // Get Stop Button
+        const stopWebDriver = document.querySelector('#stopWebDriver');
+        // Get URL Input
+        var url = $("#newURLValue").val();
+        $.ajax({
+            url: "/Dashboard/Recorder",
+            method: "GET",
+            data: { url: url, stop: false},
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(error, status, xhr);
+            }
+        });
+        // Update Buttons ariaDisabled
+        stopWebDriver.disabled = false;
+        this.disabled = true;                       
+    });
 
-        var isPressed = $(this).attr("aria-pressed") === "false";
-        var dispose = false;
-        if (isPressed) {
-            dispose = true;
-        }
-        
-        if (dispose) {
-            // Send the AJAX request
-            $.ajax({
-                url: "/Dashboard/DisposeWebDriver",
-                method: "GET",
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        } else {
-            var url = $("#newURLValue").val();
-            // Send the AJAX request
-            $.ajax({
-                url: "/Dashboard/Recorder",
-                method: "GET",
-                data: { url: url },
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
+    $("#stopWebDriver").click(function (e) {
+        e.preventDefault();
+        // Get Save Button
+        const saveWebDriver = document.querySelector('#saveWebDriver');
+        $.ajax({
+            url: "/Dashboard/StopRecorder",
+            method: "GET",
+            success: function (response) {
+                console.log(response);                
+            },
+            error: function (xhr, status, error) {
+                console.error(error, status, xhr);
+            }
+        });
+        // Update Save Button so that it is no longer disabled
+        saveWebDriver.disabled = false;
+        // Disable Stop Button
+        this.disabled = true;
+    });
+
+    $("#saveWebDriver").click(function (e) {
+        e.preventDefault();
+        // Get Start Button
+        const startWebDriver = document.querySelector('#startWebDriver');
+        $.ajax({
+            url: "/Dashboard/SaveRecording",
+            method: "POST",
+            success: function (response) {
+                console.log(response);
+                // Update Start Button so that it is no longer disabled
+                startWebDriver.disabled = false;
+                // Disable Save Button
+                this.disabled = true;
+            },
+            error: function (xhr, status, error) {
+                console.error(error, status, xhr);
+            }
+        });
     });
 });
 
@@ -126,15 +150,15 @@ $(document).ready(function () {
             error: function (xhr, status, error) {
                 console.error(error);
             }
-        });    
-    const toastTrigger = document.getElementById('playbackNotify')
-    const toastLiveExample = document.getElementById('notification')
+        });
+        const toastTrigger = document.getElementById('playbackNotify')
+        const toastLiveExample = document.getElementById('notification')
 
-    if (toastTrigger) {
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-        toastTrigger.addEventListener('click', () => {
-            toastBootstrap.show()
-        })
+        if (toastTrigger) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastTrigger.addEventListener('click', () => {
+                toastBootstrap.show()
+            })
         }
     });
 });

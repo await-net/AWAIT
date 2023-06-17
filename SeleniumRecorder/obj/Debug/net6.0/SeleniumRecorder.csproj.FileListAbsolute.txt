@@ -222,3 +222,5 @@ C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder\obj\Debug\net6.0\SeleniumRecorder.pdb
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder\obj\Debug\net6.0\SeleniumRecorder.genruntimeconfig.cache
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder\obj\Debug\net6.0\ref\SeleniumRecorder.dll
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder\bin\Debug\net6.0\AWAIT.DAL.dll
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\SeleniumRecorder\bin\Debug\net6.0\AWAIT.DAL.pdb

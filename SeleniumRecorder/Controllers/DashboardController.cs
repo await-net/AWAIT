@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using AWAIT.DAL;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,8 +10,8 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Models;
 using SeleniumRecorder.Services;
-using System;
-using System.Text.Json;
+using System.Runtime.ConstrainedExecution;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SeleniumRecorder.Controllers
 {
@@ -21,7 +23,8 @@ namespace SeleniumRecorder.Controllers
 
         private Task<object>? executeScriptTask;
         private CancellationTokenSource? cancellationTokenSource;
-        public IWebDriver? webDriver;
+        public ThreadLocal<IWebDriver> DriverThread;
+        public IWebDriver? _webDriver;
 
         public DashboardController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor, AwaitDbContext context)
         {
@@ -47,7 +50,7 @@ namespace SeleniumRecorder.Controllers
             Console.WriteLine("PLAYBACK!");
             SeleniumController selenium = new();
             selenium.Index(1);
-            ViewBag.Console = "Started IDR Login Playback";           
+            ViewBag.Console = "Started IDR Login Playback";
 
         }
         /// <summary>
@@ -68,23 +71,24 @@ namespace SeleniumRecorder.Controllers
 
             // Ensure WebDriver Exists
             ChromeOptions chromeOptions = new();
-            webDriver ??= new ChromeDriver(chromeDriverPath, chromeOptions);
-
+            _webDriver ??= new ChromeDriver(chromeDriverPath, chromeOptions);
+            
             // Initialize Driver if stop is FALSE
             if (url != null)
             {
-                webDriver.Navigate().GoToUrl(url);
-                webDriver.Manage().Window.Maximize();
+                _webDriver.Navigate().GoToUrl(url);
+                _webDriver.Manage().Window.Maximize();
             }
+            DriverThread = new ThreadLocal<IWebDriver>();
+            DriverThread.Value = _webDriver;
 
-            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)webDriver;
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_webDriver;
             // Maximum wait time for the script execution
             TimeSpan timeout = TimeSpan.FromSeconds(10);
-
             // Execute the script asynchronously
             executeScriptTask = Task.Run(() =>
             {
-                IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)webDriver;
+                IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_webDriver;
                 var eventResult = jsExecutor.ExecuteScript(recordDocumentScriptCONTENT);
                 return eventResult; // Return the captured event and element information
             });
@@ -96,7 +100,7 @@ namespace SeleniumRecorder.Controllers
             Task monitorUrlTask = MonitorUrlChanges(url!, cancellationTokenSource.Token);
 
             // Wait for the script execution to complete or timeout
-            WebDriverWait wait = new(webDriver, timeout);
+            WebDriverWait wait = new(_webDriver, timeout);
             try
             {
                 await wait.Until(d => executeScriptTask);
@@ -108,7 +112,9 @@ namespace SeleniumRecorder.Controllers
             }
             await monitorUrlTask;
             cancellationTokenSource.Cancel();
+            
         }
+       
         /// <summary>
         /// Responsible for Capturing Events & Saving back to database
         /// </summary>
@@ -118,18 +124,36 @@ namespace SeleniumRecorder.Controllers
         [HttpPost]
         public async Task Recorder([FromBody] dynamic eventResult)
         {
-            // Deserialize the JSON string
-            try
+            var webElementEventResult = JsonConvert.DeserializeObject<WebElementEventResult>(eventResult.ToString());
+
+            var eventDataModel = new EventDataModel
             {
-                Console.WriteLine($"Recording {eventResult.ToString()}");
-                // Deserialize the JSON string
-                var json = JsonConvert.DeserializeObject<dynamic>(eventResult.ToString());
-            }
-            catch (Exception ex)
+                EventType = webElementEventResult.EventType,
+                Targets = new List<TargetModel>()
+            };
+
+            if (webElementEventResult.Target is JObject targetObject)
             {
-                // Handle and log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                // Process the targets array
+                if (targetObject["targets"] is JArray targetsArray)
+                {
+                    foreach (JArray target in targetsArray)
+                    {
+                        var targetData = new TargetModel();
+                        var targetProperty = new ElementProperty
+                        {
+                            TargetModelId = targetData.Id,
+                            Key = target[0].ToString(),
+                            Value = target[1].ToString()
+                        };
+                        targetData.ElementProperties = new List<ElementProperty> { targetProperty };
+                        eventDataModel.Targets.Add(targetData);
+                    }
+                }
             }
+            // Save Event to Db
+            _context.EventData!.Add(eventDataModel);
+            await _context.SaveChangesAsync();
         }
         /// <summary>
         /// Responsible for Monitoring URL Changes
@@ -148,18 +172,18 @@ namespace SeleniumRecorder.Controllers
             while (!cancellationToken.IsCancellationRequested)
             {
                 // Check if the URL has changed
-                if (webDriver!.Url != initialUrl)
+                if (_webDriver!.Url != initialUrl)
                 {
                     // Create a new executeScriptTask for the new URL
                     executeScriptTask = Task.Run(() =>
                     {
-                        IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)webDriver;
+                        IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_webDriver;
                         var eventResult = jsExecutor.ExecuteScript(recordDocumentScriptCONTENT);
                         return eventResult; // Return the captured event and element information
                     });
 
                     // Update the initialUrl to the new URL
-                    initialUrl = webDriver.Url;
+                    initialUrl = _webDriver.Url;
                 }
 
                 // Delay for a certain period before checking the URL again
@@ -170,13 +194,10 @@ namespace SeleniumRecorder.Controllers
         /// Responsible for Disposing WebDriver & Preventing Memory Leaks
         /// </summary>
         [HttpGet]
-        private void DisposeWebDriver()
+        public void StopRecorder()
         {
-            webDriver!.Dispose();
-            // Garbage Collection Every Monday!
-            DisposeWebDriver dispose = new();
-            dispose.Dispose();
-
+            DriverThread.Value.Quit();
+            DriverThread.Value = null;
         }
     }
 }

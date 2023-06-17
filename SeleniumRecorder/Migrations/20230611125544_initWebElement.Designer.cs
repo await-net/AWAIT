@@ -24,7 +24,7 @@ namespace SeleniumRecorder.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SeleniumRecorder.Models.WebElementDataModel", b =>
+            modelBuilder.Entity("SeleniumRecorder.Models.WebElementEventResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

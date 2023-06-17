@@ -2513,6 +2513,16 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
+      "AWAIT.DAL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/AWAIT.DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AWAIT.DAL.dll": {}
+        }
+      },
       "SeleniumRecorderApi/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -7901,6 +7911,11 @@
         "system.xml.xdocument.nuspec"
       ]
     },
+    "AWAIT.DAL/1.0.0": {
+      "type": "project",
+      "path": "../AWAIT.DAL/AWAIT.DAL.csproj",
+      "msbuildProject": "../AWAIT.DAL/AWAIT.DAL.csproj"
+    },
     "SeleniumRecorderApi/1.0.0": {
       "type": "project",
       "path": "../SeleniumRecorderApi/SeleniumRecorderApi.csproj",
@@ -7909,6 +7924,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "AWAIT.DAL >= 1.0.0",
       "DotNetSeleniumExtras.WaitHelpers >= 3.11.0",
       "Microsoft.EntityFrameworkCore >= 7.0.5",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.5",
@@ -7954,6 +7970,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+            "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj": {
+              "projectPath": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj"
+            },
             "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorderApi\\SeleniumRecorderApi.csproj": {
               "projectPath": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\SeleniumRecorderApi\\SeleniumRecorderApi.csproj"
             }
