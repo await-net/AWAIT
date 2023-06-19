@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 const consoleOutput = document.querySelector('.console-output');
 const consoleCursor = document.querySelector('.console-cursor');
-const texts = ['Hello World!', 'AWAIT - Your Automated QA Solution!', '@ViewBag.Console'];
+const texts = ['Hello World!', 'AWAIT - Your Automated QA Solution!'];
 let index = 0;
 
 // Animate typing effect

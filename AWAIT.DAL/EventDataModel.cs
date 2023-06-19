@@ -13,17 +13,17 @@ namespace AWAIT.DAL
     {
         [Key]
         public int Id { get; set; }
-        public ICollection<ElementProperty> ElementProperties { get; set; }
+        public ICollection<ElementProperty>? ElementProperties { get; set; }
     }
 
     public class ElementProperty
     {
         [Key]
         public int Id { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
+        public string? Key { get; set; }
+        public string? Value { get; set; }
 
-        public int TargetModelId { get; set; }
-        public TargetModel TargetModel { get; set; }
+        public int? TargetModelId { get; set; }
+        public TargetModel? TargetModel { get; set; }
     }
 }

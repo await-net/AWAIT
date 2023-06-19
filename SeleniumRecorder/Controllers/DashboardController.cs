@@ -10,8 +10,10 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Models;
 using SeleniumRecorder.Services;
+using System.Diagnostics;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 
 namespace SeleniumRecorder.Controllers
 {
@@ -25,6 +27,7 @@ namespace SeleniumRecorder.Controllers
         private CancellationTokenSource? cancellationTokenSource;
         public ThreadLocal<IWebDriver> DriverThread;
         public IWebDriver? _webDriver;
+        public int _processId = -1;
 
         public DashboardController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor, AwaitDbContext context)
         {
@@ -45,6 +48,16 @@ namespace SeleniumRecorder.Controllers
             return View();
         }
         [HttpGet]
+        public IActionResult CreateTest()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateTest(TestSuitViewModel testSuitView)
+        {
+            return View();
+        }
+        [HttpGet]
         public async Task Playback()
         {
             Console.WriteLine("PLAYBACK!");
@@ -61,7 +74,7 @@ namespace SeleniumRecorder.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
-        public async Task Recorder(string? url)
+        public async Task Recorder(string? url, TestSuitModel testSuitModel)
         {
             string webRootPath = _hostEnvironment.WebRootPath;
             string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");
@@ -69,18 +82,20 @@ namespace SeleniumRecorder.Controllers
             string recordDocumentScriptPATH = Path.Combine(webRootPath, "js", "recorderVersion1.js");
             string recordDocumentScriptCONTENT = System.IO.File.ReadAllText(recordDocumentScriptPATH);
 
-            // Ensure WebDriver Exists
-            ChromeOptions chromeOptions = new();
-            _webDriver ??= new ChromeDriver(chromeDriverPath, chromeOptions);
-            
-            // Initialize Driver if stop is FALSE
+            // Setup Web Driver & Process
+            var cService = ChromeDriverService.CreateDefaultService(chromeDriverPath);
+            var options = new ChromeOptions();
+            _webDriver = new ChromeDriver(cService, options);
+            Console.WriteLine($"{cService.ProcessId}");
+            // Navigate to URL
             if (url != null)
             {
                 _webDriver.Navigate().GoToUrl(url);
                 _webDriver.Manage().Window.Maximize();
             }
-            DriverThread = new ThreadLocal<IWebDriver>();
-            DriverThread.Value = _webDriver;
+
+            // Get the Process ID
+            int pid = cService.ProcessId;
 
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_webDriver;
             // Maximum wait time for the script execution
@@ -112,9 +127,7 @@ namespace SeleniumRecorder.Controllers
             }
             await monitorUrlTask;
             cancellationTokenSource.Cancel();
-            
-        }
-       
+        }       
         /// <summary>
         /// Responsible for Capturing Events & Saving back to database
         /// </summary>
@@ -194,10 +207,28 @@ namespace SeleniumRecorder.Controllers
         /// Responsible for Disposing WebDriver & Preventing Memory Leaks
         /// </summary>
         [HttpGet]
-        public void StopRecorder()
+        public IActionResult StopRecorder()
         {
-            DriverThread.Value.Quit();
-            DriverThread.Value = null;
+            // Retrieve the cookie
+            if (Request.Cookies.TryGetValue("WebDriverPID", out string? cookieValue))
+            {
+                // Parse the PID from the cookie value
+                int pid = int.Parse(cookieValue!);
+
+                // Get the process using the stored PID
+                Process process = Process.GetProcessById(pid);
+
+                // Kill the process
+                process.Kill();
+                Console.WriteLine(cookieValue);
+
+                return Ok();
+            }
+            else
+            {
+                Console.WriteLine("Cookie Not Found!");
+            }
+            return BadRequest();
         }
     }
 }

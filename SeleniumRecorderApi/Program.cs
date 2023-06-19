@@ -9,16 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-// SESSION
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
+
 // SQL
 builder.Services.AddDbContext<SeleniumTestContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SeleniumTestConnString")));
 
 //
 builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

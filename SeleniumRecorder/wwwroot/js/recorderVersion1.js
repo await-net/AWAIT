@@ -24,8 +24,6 @@ function eventHandler(event) {
         value: ""
     };
 
-    console.log('event:', eventResult);
-
     // Allow the captured event to continue its normal execution
     setTimeout(function() {
         var dispatchedEvent = new Event(event.type, { bubbles: true, cancelable: true });
@@ -39,10 +37,7 @@ function eventHandler(event) {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            console.log("Successfully Connected to Server! :D");
-            // Handle the response if needed
-        } else {
-            console.log("Unable to Connect to Server! :(");
+            console.log("Success! Connect to Server!", xhr.status);
         }
     };
     xhr.send(JSON.stringify(eventResult));

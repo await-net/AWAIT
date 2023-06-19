@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TestSuitViewModel
+@{
     ViewData["Title"] = "ToolBox";
 }
 <style>
@@ -147,11 +148,11 @@
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item">
                                         <a href="#0" class="nav-link active" data-bs-toggle="tab" data-bs-target="#record"
-                                           aria-controls="record" aria-selected="false">Start Recording</a>
+                                           aria-controls="record" aria-selected="false">Setup</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#playback"
-                                           aria-controls="playback" aria-selected="false">Recorder Configuration</a>
+                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#config"
+                                           aria-controls="config" aria-selected="false">Advanced Setup & Configuration</a>
                                     </li>
                                 </ul>
                             </div>
@@ -159,54 +160,96 @@
                                 <!--RECORDER-TAB-CONTENT-->
                                 <div class="tab-content p-2">
                                     <div class="tab-pane fade show active" id="record">
+
                                         <!--RECORDER-HEADING-->
                                         <div class="text-body-secondary p-2">
-                                            <p class="h5">
-                                                Test Suit Recorder
-                                            </p>
                                             <figure>
                                                 <blockquote class="blockquote">
                                                 </blockquote>
                                                 <figcaption class="blockquote-footer">
                                                     <p class="lead h5">
-                                                        Record Interactions<br>
-                                                        <small class="text-body-secondary">
-                                                            Start recorder to record events based on
-                                                            your interactions with targeted website or webpage.
+                                                        Setup Recorder<br>
+                                                        <small class="text-body-secondary font-monospace">
+                                                            Setup recorder & begin interacting with the targeted website or webpage.
                                                         </small>
                                                 </figcaption>
                                             </figure>
-                                        </div>
-                                        <!--RECORDER-BODY-->
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <span>
-                                                    <small>Starting Address</small>
-                                                </span>
-                                                <p class="h4 text-secondary-emphasis d-flex flex-row align-items-center justify-content-end">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" aria-label="target"
-                                                               id="newURLValue" placeholder="Enter website address..."
-                                                               value="https://www.wootware.co.za/">                                                            
-                                                        <button type="button" id="toggleWebDriver"
-                                                                class="btn btn-outline-danger button-click-animation align-items-center justify-content-start"
-                                                                data-bs-toggle="button" aria-pressed="false">
-                                                            <small>RECORD</small>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                                 fill="currentColor"
-                                                                 class="bi bi-record-circle animated-raindrop"
-                                                                 viewBox="0 0 16 16">
-                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                            </svg>
-                                                        </button>
-                                                        <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
-                                                            <button type="button" class="btn btn-outline-success" id="startWebDriver">Start</button>
-                                                            <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
-                                                            <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
+                                            <form asp-action="CreateTest" method="post">
+                                                <div class="row g-2">
+                                                    <hr>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="input-group">
+                                                            <div class="form-floating">
+                                                                <select class="form-select" asp-for="SuitPlan" id="floatingSelect" aria-label="selectSuitLabel">
+                                                                    <option value="1">My Suit</option>
+                                                                    <option value="1">IDR Enterprise Suit</option>
+                                                                </select>
+                                                                <label for="SuitPlan">Select a Suit</label>
+                                                            </div>
+                                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createNewSuit" aria-controls="createNewSuit">Add</button>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="input-group">
+                                                            <div class="form-floating">
+                                                                <select class="form-select" asp-for="TestType" id="floatingSelect" aria-label="Floating label select example">
+                                                                    <option selected>Default</option>
+                                                                    <option value="1">Inputs & Forms</option>
+                                                                    <option value="2">Media Players & Images</option>
+                                                                    <option value="3">Inclusive(Experimental)</option>
+                                                                </select>
+                                                                <label for="TestType">Select a Test Type</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-floating">
+                                                            <input type="text" asp-for="TestName" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <label for="TestName">Test Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-floating">
+                                                            <input type="text" asp-for="TestDescription" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <label for="TestDescription">Test Description</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-floating">
+                                                            <input type="text" asp-for="TestUrl" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <label for="TestUrl">Test URL</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="input-group mb-3">
+                                                            <div class="form-floating">
+                                                                <select class="form-select" asp-for="TestWebDriver" id="floatingSelect" aria-label="Floating label select example">
+                                                                    <option selected>Chrome (114.0.5735.90)</option>
+                                                                </select>
+                                                                <label for="floatingSelect">Select a Test Type</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-2">
+                                                    <button type="submit" class="btn btn-outline-info">Save</button>
+                                                </div>
+                                            </form>
+                                            <div class="col-6">
+                                                <p class="h4 p-2 text-secondary-emphasis d-flex flex-row align-items-center justify-content-start">
+                                                    Recorder Controls
                                                 </p>
+                                            </div>
+                                            <div class="p-2">
+                                                <div class="input-group">
+                                                    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                                                        <button type="button" class="btn btn-outline-success" id="startWebDriver">
+                                                            Start
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
+                                                        <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <hr>
@@ -216,10 +259,50 @@
                                         <div class="tab-pane fade show" id="config">
                                             <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
                                         </div>
+                                        <hr>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="createNewSuit" aria-labelledby="createNewSuitLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="createNewSuitLabel">Register Suit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <hr>
+                        <div class="font-monospace">
+                            <p><em>Please Select Suit Plan & Register Suit</em></p>
+                        </div>
+                        <form>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="form-floating">
+                                            <input type="password" asp-for="SuitName" class="form-control" id="floatingSuitName" placeholder="Name">
+                                            <label for="SuitName">Suit Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="form-floating">
+                                            <select class="form-select" c asp-for="SuitPlan" id="selectPlans" aria-label="selectPlansLabel">
+                                                <option value="1">Basic</option>
+                                                <option value="2">Premium</option>
+                                                <option value="3">Enterprise</option>
+                                            </select>
+                                            <label for="SuitPlan">Select an available suit plan</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-outline-info">Register Suit</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <!--PLAYBACK-TOOL-->
@@ -230,7 +313,7 @@
                         <div class="card-body bg-dark-subtle text-emphasis-dark">
                             <h6 class="card-title">Manage & Interact With Your Playback</h6>
                             <p class="card-text">
-                                Discover New Issues, Generate Fresh Reports or Test New Features with Old Infrastucuture. Use Playbacks to <em>Automate</em> Your Testing & QA
+                                Discover New Issues, Generate Fresh Reports or Test New Features with Old Infrastructure. Use Playbacks to <em>Automate</em> Your Testing & QA
                                 Processes!
                             </p>
                         </div>
@@ -306,67 +389,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--
-                                <a data-bs-toggle="collapse" href="#customSuitplayback" role="button"
-                                   aria-expanded="false" aria-controls="customSuitplayback"
-                                   class="list-group-item list-group-item-action">
-                                    <span class="lead font-monospace">Custom Suit Playback </span><span class="navbar-toggler-icon"></span>
-                                </a>
-                                <div class="collapse multi-collapse p-1" id="customSuitplayback">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-primary button-click-animation align-items-center justify-content-start">
-                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
-                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
-                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <a data-bs-toggle="collapse" href="#otherSuitplayback" role="button"
-                                   aria-expanded="false" aria-controls="otherSuitplayback"
-                                   class="list-group-item list-group-item-action">
-                                    <span class="lead font-monospace">Other Suit Playback </span><span class="navbar-toggler-icon"></span>
-                                </a>
-                                <div class="collapse multi-collapse p-1" id="otherSuitplayback">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-primary button-click-animation align-items-center justify-content-start">
-                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
-                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
-                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                -->
                             </div>
                         </div>
                         <hr>
@@ -396,9 +418,8 @@
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="#" class="rounded me-2" alt="Playback">
-            <strong class="me-auto">Playback Tool</strong>
+        <div class="toast-header" id="toastHeader">            
+            <strong class="me-auto"><i class="bi bi-play-circle"></i> Playback Tool</strong>
             <small>Just now</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>

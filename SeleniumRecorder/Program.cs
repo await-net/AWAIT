@@ -4,11 +4,16 @@ using OpenQA.Selenium.Chrome;
 using SeleniumRecorder.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
+// COOKIES
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+// SESSION
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+// SQL
 builder.Services.AddDbContext<AwaitDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("db_context") ?? throw new InvalidOperationException("Connection string 'db_context' not found.")));
 builder.Services.AddControllersWithViews();
-
+// WEBDRIVER
 builder.Services.AddTransient<IWebDriver>(provider =>
 {
     string webRootPath = provider.GetRequiredService<IWebHostEnvironment>().WebRootPath;

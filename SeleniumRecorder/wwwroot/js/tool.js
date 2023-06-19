@@ -75,6 +75,9 @@ window.addEventListener('load', () => {
     });
 });
 $(document).ready(function () {
+    const toastLiveExample = document.getElementById('notification');
+    const toastTrigger = document.getElementById('startWebDriver');
+
     $("#startWebDriver").click(function (e) {
         e.preventDefault();
         // Get Stop Button
@@ -84,7 +87,7 @@ $(document).ready(function () {
         $.ajax({
             url: "/Dashboard/Recorder",
             method: "GET",
-            data: { url: url, stop: false},
+            data: { url: url, stop: false },
             success: function (response) {
                 console.log(response);
             },
@@ -94,7 +97,18 @@ $(document).ready(function () {
         });
         // Update Buttons ariaDisabled
         stopWebDriver.disabled = false;
-        this.disabled = true;                       
+        this.disabled = true;
+        // Find the toast body element by its class
+        const toastBody = document.querySelector('.toast-body');
+
+        // Check if the toast body element exists
+        if (toastBody) {
+            // Change the text content of the toast body element
+            toastBody.textContent = 'Tool has Started Recording!';
+        }
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        toastBootstrap.show()
+
     });
 
     $("#stopWebDriver").click(function (e) {
@@ -105,7 +119,7 @@ $(document).ready(function () {
             url: "/Dashboard/StopRecorder",
             method: "GET",
             success: function (response) {
-                console.log(response);                
+                console.log(response);
             },
             error: function (xhr, status, error) {
                 console.error(error, status, xhr);
@@ -135,7 +149,13 @@ $(document).ready(function () {
                 console.error(error, status, xhr);
             }
         });
-    });
+    });    
+    //if (toastTrigger) {
+      //  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        //toastTrigger.addEventListener('click', () => {
+          //  toastBootstrap.show()
+        //});
+    //}
 });
 
 $(document).ready(function () {
@@ -151,15 +171,6 @@ $(document).ready(function () {
                 console.error(error);
             }
         });
-        const toastTrigger = document.getElementById('playbackNotify')
-        const toastLiveExample = document.getElementById('notification')
-
-        if (toastTrigger) {
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-            toastTrigger.addEventListener('click', () => {
-                toastBootstrap.show()
-            })
-        }
     });
 });
 
