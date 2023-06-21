@@ -15,6 +15,9 @@ namespace AWAIT.DAL
         public int SuitId { get; set; }
         public string? SuitName { get; set; }
         public string? SuitPlan { get; set; }
+
+        public int UserId { get; set; }
+        public UserModel? User { get; set; }
     }
     public class TestModel
     {

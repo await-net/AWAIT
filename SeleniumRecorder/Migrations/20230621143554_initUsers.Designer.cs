@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SeleniumRecorder.DAL;
 
@@ -11,9 +12,11 @@ using SeleniumRecorder.DAL;
 namespace SeleniumRecorder.Migrations
 {
     [DbContext(typeof(AwaitDbContext))]
-    partial class AwaitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230621143554_initUsers")]
+    partial class initUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,11 +85,14 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("SuitName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SuitPlan")
+                    b.Property<string>("SuitOwnerId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuitOwnerUsername")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SuitPlan")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserModelId")
                         .HasColumnType("int");

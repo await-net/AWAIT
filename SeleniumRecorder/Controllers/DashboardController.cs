@@ -7,6 +7,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
+using SeleniumRecorder.Migrations;
 using SeleniumRecorder.Models;
 using System.Diagnostics;
 
@@ -36,34 +37,95 @@ namespace SeleniumRecorder.Controllers
         }
         public IActionResult ToolBox()
         {
-            return View();
+            var viewModel = new SuitTestView();
+
+            var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
+
+            try
+            {
+                var suits = _context.Suits.Where(s => s.UserId == user!.Id).Select(s => new SuitView
+                {
+                    SuitName = s.SuitName,
+                    SuitPlan = s.SuitPlan
+                }).ToList();
+                
+                if(suits.Count() > 0)
+                {
+                    viewModel.SuitView = suits;
+                }
+                else
+                {
+                    var defaultSuit = new List<SuitView>
+                {
+                    new SuitView
+                    {
+                        SuitName = "Please Register Suit",
+                        SuitPlan = ""
+                    }
+                };
+                    viewModel.SuitView = defaultSuit;
+                }
+            }
+            catch(Exception ex)
+            {
+                var defaultSuit = new List<SuitView>
+                {
+                    new SuitView
+                    {
+                        SuitName = "Please Register Suit",
+                        SuitPlan = ""
+                    }
+                };
+                viewModel.SuitView = defaultSuit;
+            }
+            return View(viewModel);
         }
         public IActionResult Settings()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTest(TestSuitViewModel testSuitView)
+        public async Task RegisterSuit(SuitTestView model)
         {
-            var suitModel = new SuitModel
+            var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
+            var registerSuit = new SuitModel
             {
-                SuitName = testSuitView.Suit!.SuitName,
-                SuitPlan = testSuitView.Suit.SuitPlan
+                SuitName = model.SuitRegisterView!.SuitName,
+                SuitPlan = model.SuitRegisterView.SuitPlan,
+                UserId = user!.Id
             };
-            var testModel = new TestModel
+            await _context.Suits.AddAsync(registerSuit);
+            await _context.SaveChangesAsync();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateTest(SuitTestView model)
+        {
+            string testUrl = model.TestCreateView!.TestUrl!;
+            string suitName = model.TestCreateView.SuitName!;
+
+            // Compile Valid URL for Driver:
+            if (!testUrl.StartsWith("https://"))
             {
-                TestWebDriver = testSuitView.Test!.TestWebDriver,
-                TestName = testSuitView.Test.TestName,
-                TestType = testSuitView.Test.TestType,
-                TestUrl = testSuitView.Test.TestUrl,
-                SuitId = suitModel.SuitId,
-                Suit = suitModel
+                _ = testUrl!.Insert(0, "https://");
+            }
+
+            // Suit Name Db Lookup => SuitId
+            var selectedSuit = _context.Suits.Where(s => s.SuitName == suitName).FirstOrDefault();
+
+            var createTest = new TestModel
+            {
+                TestWebDriver = model.TestCreateView!.TestWebDriver,
+                TestName = model.TestCreateView.TestName,
+                TestType = model.TestCreateView.TestType,
+                TestUrl = testUrl,
+                SuitId = selectedSuit!.SuitId,
+                Suit = selectedSuit
+                
             };
-            await _context.Suits.AddAsync(suitModel);
+
+            await _context.Tests.AddAsync(createTest);
             await _context.SaveChangesAsync();
-            await _context.Tests.AddAsync(testModel);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Recorder), new { url = testSuitView.Test.TestUrl});
+            return RedirectToAction(nameof(Recorder), new { url = testUrl });
         }
         [HttpGet]
         public async Task Playback()
@@ -82,7 +144,7 @@ namespace SeleniumRecorder.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
-        public async Task Recorder(string? url, TestSuitViewModel testSuitModel)
+        public async Task Recorder(string? url)
         {
             string webRootPath = _hostEnvironment.WebRootPath;
             string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");

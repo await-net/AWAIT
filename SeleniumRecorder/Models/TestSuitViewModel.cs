@@ -1,22 +1,24 @@
 ﻿namespace SeleniumRecorder.Models
 {
-    public class SuitViewModel
+    public class SuitView
     {
         public string? SuitName { get; set; }
         public string? SuitPlan { get; set; }
     }
-    public class TestViewModel
+    public class TestView
     {
         public string? TestWebDriver { get; set; }
         public string? TestName { get; set; }
         public string? TestType { get; set; }
         public string? TestDescription { get; set; }
         public string? TestUrl { get; set; }
+        public string? SuitName { get; set;}
     }
-
-    public class TestSuitViewModel
+    public class SuitTestView
     {
-        public SuitViewModel? Suit { get; set; }
-        public TestViewModel? Test { get; set; }
+        public List<TestView>? TestView { get; set; }
+        public List<SuitView>? SuitView { get; set; }
+        public TestView? TestCreateView { get; set; }
+        public SuitView? SuitRegisterView { get; set; }
     }
 }
