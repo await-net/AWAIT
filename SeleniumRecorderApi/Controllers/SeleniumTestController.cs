@@ -1,14 +1,10 @@
-﻿ using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using SeleniumRecorderApi.Data;
 using SeleniumRecorderApi.Models;
 
 namespace SeleniumRecorderApi.Controllers
 {
-    
+
     [ApiController]
     [Route("[controller]",Name = "Selenium Recorder Api")]
     public class SeleniumTestController : Controller

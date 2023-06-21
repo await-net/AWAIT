@@ -1,7 +1,7 @@
 ﻿using AWAIT.DAL;
 using Microsoft.EntityFrameworkCore;
 
-namespace SeleniumRecorder.DAL
+namespace SeleniumRecorderApi.Data
 {
     public class AwaitDbContext : DbContext
     {
@@ -19,7 +19,7 @@ namespace SeleniumRecorder.DAL
             modelBuilder.Entity<EventModel>().ToTable("EventModel");
             modelBuilder.Entity<TargetModel>().ToTable("TargetModel");
             modelBuilder.Entity<TargetTypeModel>().ToTable("TargetTypeModel");
-           
+
         }
 
     }

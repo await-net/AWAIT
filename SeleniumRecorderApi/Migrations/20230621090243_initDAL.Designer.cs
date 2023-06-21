@@ -5,18 +5,19 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SeleniumRecorder.DAL;
+using SeleniumRecorderApi.Data;
+
 
 #nullable disable
 
-namespace SeleniumRecorder.Migrations
+namespace SeleniumRecorderApi.Migrations
 {
     [DbContext(typeof(AwaitDbContext))]
     [Migration("20230621090243_initDAL")]
     partial class initDAL
     {
         /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

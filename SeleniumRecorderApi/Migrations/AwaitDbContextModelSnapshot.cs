@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SeleniumRecorder.DAL;
+using SeleniumRecorderApi.Data;
+
 
 #nullable disable
 
-namespace SeleniumRecorder.Migrations
+namespace SeleniumRecorderApi.Migrations
 {
     [DbContext(typeof(AwaitDbContext))]
     partial class AwaitDbContextModelSnapshot : ModelSnapshot

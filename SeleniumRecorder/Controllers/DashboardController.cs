@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using SeleniumRecorder.DAL;
+
 using SeleniumRecorder.Models;
+using SeleniumRecorderApi.Data;
 using System.Diagnostics;
 
 namespace SeleniumRecorder.Controllers
@@ -70,7 +70,7 @@ namespace SeleniumRecorder.Controllers
         {
             Console.WriteLine("PLAYBACK!");
             SeleniumController selenium = new();
-            selenium.Index(1);
+            selenium.IndexAsync(1);
             ViewBag.Console = "Started IDR Login Playback";
 
         }

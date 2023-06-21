@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using SeleniumRecorder.DAL;
+using SeleniumRecorderApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // COOKIES

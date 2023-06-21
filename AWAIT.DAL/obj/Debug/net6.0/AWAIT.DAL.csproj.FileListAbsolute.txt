@@ -10,3 +10,15 @@ C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\De
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\refint\AWAIT.DAL.dll
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.pdb
 C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\ref\AWAIT.DAL.dll
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.deps.json
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.dll
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.pdb
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.csproj.AssemblyReference.cache
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.AssemblyInfoInputs.cache
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.AssemblyInfo.cs
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.csproj.CoreCompileInputs.cache
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.dll
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\refint\AWAIT.DAL.dll
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.pdb
+C:\Users\TroyMartin\Source\Repos\await-net\AWAIT\AWAIT.DAL\obj\Debug\net6.0\ref\AWAIT.DAL.dll

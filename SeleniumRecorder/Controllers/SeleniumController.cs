@@ -1,71 +1,80 @@
-﻿using AWAIT.DAL;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V111.Network;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using SeleniumRecorder.Models;
-using SeleniumRecorderApi.Models;
-using System.Dynamic;
+using SeleniumRecorderApi.Data;
+using SeleniumRecorderApi.Interfaces;
+using SeleniumRecorderApi.Repositories;
 
 namespace SeleniumRecorder.Controllers
 {
     public class SeleniumController : Controller
     {
-      
-        public IActionResult Index(int id)
+        private readonly AwaitDbContext _context;
+        public IWebDriver? _webDriver;
+        public IDBRepository _dbRepository;
+
+        public SeleniumController(IDBRepository dBRepository, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor, AwaitDbContext context)
         {
-            //var seleniumTest = JsonConvert.DeserializeObject<EventTargetModel>(System.IO.File.ReadAllText("IDR.side"));
-            //var test = seleniumTest.Tests.FirstOrDefault();
-            //var url = seleniumTest.Url;
+            _context = context;
+            this._dbRepository = dBRepository;
+        }
 
-            //var chromeOptions = new ChromeOptions {
+        public SeleniumController() { }
 
-            //};
-            //var driver = new ChromeDriver();
-            //driver.Manage().Timeouts().PageLoad = new TimeSpan(0,0,0,15);
+        public async Task<IActionResult> IndexAsync(int id)
+        {
 
-            //driver.Navigate().GoToUrl(url);
-            //foreach(var command in test.Commands)
-            //{ 
-            //    try
-            //    {
-            //        IWebElement element = null;
-            //        switch (command.Comm)
-            //        { 
-            //          case "setWindowSize":
-            //                driver.Manage().Window.Maximize();
-            //                break;
-            //            case "type":
-            //                element = GetElement(command.Target,driver,TimeSpan.FromMinutes(1));
-            //                element.SendKeys(command.Value);
-            //                break;
+            var suite = await _dbRepository.GetTestSuite(id);
+            var tests = await _dbRepository.GetTests(suite.SuitId);
+            var test = tests.FirstOrDefault();
+           
+            var events = _context.EPTs.Where(x => x.Id == test.TestId);
+            _webDriver.Navigate().GoToUrl(test?.TestUrl);
+            foreach (var command in events)
+            {
+                try
+                {
+                    IWebElement element = null;
+                    switch (command.EventTarget.EventType)
+                    {
+                        case "setWindowSize":
+                            _webDriver.Manage().Window.Maximize();
+                            break;
+                        case "type":
+                            var emailCode = "";
+                            element = GetElement(command.EventTarget.TargetEvent.Targets.FirstOrDefault().Type, _webDriver, TimeSpan.FromMinutes(1));
+                            if (command.EventTarget.EventType.Contains("Code"))
+                            {
+                                var mailRepository = new MailRepository("imap.gmail.com", 993, true, "tmartin804@gmail.com", "BuggeryScott");
+                                var email = mailRepository.GetAllMails().LastOrDefault();
+                                emailCode = email.Split(" ").Where(x => int.TryParse(x, out var code)).Select(x => x).FirstOrDefault();
+                            }
+                            element.SendKeys(string.IsNullOrWhiteSpace(emailCode) ? emailCode : "");
+                            break;
 
-            //            case "click":
-            //                element = driver.FindElement(By.CssSelector(command.Target.Replace("css=","")));
-            //                Actions action = new Actions(driver);
-            //                action.Click(element);
-            //                action.Build().Perform();
+                        case "click":
+                            element = GetElement(command.TargetModel.ByXPath, _webDriver, TimeSpan.FromMinutes(1));
+                            Actions action = new Actions(_webDriver);
+                            action.Click(element);
+                            action.Build().Perform();
+                            break;
 
-            //                break;
+                        case "pause":
+                            Thread.Sleep(2000);
+                            break;
+                    }
 
-            //            case "pause":
-            //                Thread.Sleep(int.Parse(command.Target));
-            //                break;
-            //    }
+                }
 
-            //    }
-            //    catch (NoSuchElementException) { }
-            //    {
+                catch (NoSuchElementException) { }
+                {
 
-            //    }
-            //}
-            //driver.Close();
-            //driver.Dispose();
-            //return Content("Your Test has Passed");
-            return View();
+                }
+            }
+            _webDriver.Close();
+            _webDriver.Dispose();
+            return Content("Your Test has Passed");
         }
 
         private List<IWebElement> GetElements(By by,IWebDriver driver,TimeSpan timeout)

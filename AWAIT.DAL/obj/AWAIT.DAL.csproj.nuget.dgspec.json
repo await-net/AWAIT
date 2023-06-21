@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj": {}
+    "C:\\Users\\TroyMartin\\Source\\Repos\\await-net\\AWAIT\\AWAIT.DAL\\AWAIT.DAL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj": {
+    "C:\\Users\\TroyMartin\\Source\\Repos\\await-net\\AWAIT\\AWAIT.DAL\\AWAIT.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj",
+        "projectUniqueName": "C:\\Users\\TroyMartin\\Source\\Repos\\await-net\\AWAIT\\AWAIT.DAL\\AWAIT.DAL.csproj",
         "projectName": "AWAIT.DAL",
-        "projectPath": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\AWAIT.DAL.csproj",
-        "packagesPath": "C:\\Users\\brand\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\brand\\source\\repos\\await_prototype\\SeleniumRecorderApi\\AWAIT.DAL\\obj\\",
+        "projectPath": "C:\\Users\\TroyMartin\\Source\\Repos\\await-net\\AWAIT\\AWAIT.DAL\\AWAIT.DAL.csproj",
+        "packagesPath": "C:\\Users\\TroyMartin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TroyMartin\\Source\\Repos\\await-net\\AWAIT\\AWAIT.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\brand\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TroyMartin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,6 +44,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -60,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
