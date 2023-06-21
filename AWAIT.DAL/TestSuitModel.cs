@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AWAIT.DAL
 {
-    public class TestSuitModel
+    public class SuitModel
     {
         [Key]
-        public int Id { get; set; }
+        public int SuitId { get; set; }
         public string? SuitName { get; set; }
-        public string? SuitType { get; set; }
-        public string? SuitDescription { get; set; }
-
-        public int? TestId { get; set; }
-        public ICollection<TestModel>? Tests { get; set; }
-
+        public string? SuitPlan { get; set; }
     }
     public class TestModel
     {
         [Key]
-        public int Id { get; set; }
+        public int TestId { get; set; }
+        public string? TestWebDriver { get; set; }
         public string? TestName { get; set; }
+        public string? TestType { get; set; }
         public string? TestUrl { get; set; }
 
-        public int? EventDataModelId { get; set; }
-        public ICollection<EventDataModel>? Events { get; set; }
+        public int SuitId { get; set; }
+        public SuitModel? Suit { get; set; }
 
     }
 }

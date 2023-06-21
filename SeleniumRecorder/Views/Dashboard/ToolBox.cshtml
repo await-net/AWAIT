@@ -180,7 +180,7 @@
                                                     <div class="col-md-6 col-12">
                                                         <div class="input-group">
                                                             <div class="form-floating">
-                                                                <select class="form-select" asp-for="SuitPlan" id="floatingSelect" aria-label="selectSuitLabel">
+                                                                <select class="form-select" asp-for="Suit.SuitName" id="floatingSelect" aria-label="selectSuitLabel" required>
                                                                     <option value="1">My Suit</option>
                                                                     <option value="1">IDR Enterprise Suit</option>
                                                                 </select>
@@ -192,7 +192,7 @@
                                                     <div class="col-md-6 col-12">
                                                         <div class="input-group">
                                                             <div class="form-floating">
-                                                                <select class="form-select" asp-for="TestType" id="floatingSelect" aria-label="Floating label select example">
+                                                                <select class="form-select" asp-for="Suit.SuitPlan" id="floatingSelect" aria-label="Floating label select example" required>
                                                                     <option selected>Default</option>
                                                                     <option value="1">Inputs & Forms</option>
                                                                     <option value="2">Media Players & Images</option>
@@ -204,35 +204,35 @@
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-floating">
-                                                            <input type="text" asp-for="TestName" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <input type="text" asp-for="Test!.TestName" class="form-control" id="floatingPassword" placeholder="Password" required>
                                                             <label for="TestName">Test Name</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-floating">
-                                                            <input type="text" asp-for="TestDescription" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <input type="text" asp-for="Test!.TestDescription" class="form-control" id="floatingPassword" placeholder="Password" required>
                                                             <label for="TestDescription">Test Description</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-floating">
-                                                            <input type="text" asp-for="TestUrl" class="form-control" id="floatingPassword" placeholder="Password">
+                                                            <input type="text" asp-for="Test!.TestUrl" class="form-control" id="floatingPassword" placeholder="Password" required>
                                                             <label for="TestUrl">Test URL</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="input-group mb-3">
                                                             <div class="form-floating">
-                                                                <select class="form-select" asp-for="TestWebDriver" id="floatingSelect" aria-label="Floating label select example">
+                                                                <select class="form-select" asp-for="Test!.TestWebDriver" id="TestWebDriver" aria-label="TestWebDriver" required> 
                                                                     <option selected>Chrome (114.0.5735.90)</option>
                                                                 </select>
-                                                                <label for="floatingSelect">Select a Test Type</label>
+                                                                <label asp-for="Test!.TestWebDriver">Select a Test Type</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="p-2">
-                                                    <button type="submit" class="btn btn-outline-info">Save</button>
+                                                    <input type="submit" class="btn btn-outline-info" value="Save" />
                                                 </div>
                                             </form>
                                             <div class="col-6">
@@ -276,12 +276,12 @@
                         <div class="font-monospace">
                             <p><em>Please Select Suit Plan & Register Suit</em></p>
                         </div>
-                        <form>
+                        <form asp-action="CreateTest" method="post">
                             <div class="row g-2">
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input type="password" asp-for="SuitName" class="form-control" id="floatingSuitName" placeholder="Name">
+                                            <input type="password" asp-for="Suit!.SuitName" class="form-control" id="floatingSuitName" placeholder="Name" required>
                                             <label for="SuitName">Suit Name</label>
                                         </div>
                                     </div>
@@ -289,7 +289,7 @@
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <select class="form-select" c asp-for="SuitPlan" id="selectPlans" aria-label="selectPlansLabel">
+                                            <select class="form-select" asp-for="Suit!.SuitPlan" id="selectPlans" aria-label="selectPlansLabel" required>
                                                 <option value="1">Basic</option>
                                                 <option value="2">Premium</option>
                                                 <option value="3">Enterprise</option>

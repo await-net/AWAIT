@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AWAIT.DAL
 {
-    internal class UserModel
+    public class UserModel
     {
+        // NOT IMPLEMENTED...
     }
 }

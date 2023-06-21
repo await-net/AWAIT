@@ -70,8 +70,6 @@ function updateCursorPosition() {
     }
 }
 
-
-
 // Start printing text once loaded
 window.addEventListener('DOMContentLoaded', () => {
     typeText(texts[index]);

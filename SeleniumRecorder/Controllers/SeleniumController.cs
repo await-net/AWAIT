@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AWAIT.DAL;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -16,54 +17,55 @@ namespace SeleniumRecorder.Controllers
       
         public IActionResult Index(int id)
         {
-            var seleniumTest = JsonConvert.DeserializeObject<SeleniumTestRecordedModel.Root>(System.IO.File.ReadAllText("IDR.side"));
-            var test = seleniumTest.Tests.FirstOrDefault();
-            var url = seleniumTest.Url;
+            //var seleniumTest = JsonConvert.DeserializeObject<EventTargetModel>(System.IO.File.ReadAllText("IDR.side"));
+            //var test = seleniumTest.Tests.FirstOrDefault();
+            //var url = seleniumTest.Url;
 
-            var chromeOptions = new ChromeOptions {
-            
-            };
-            var driver = new ChromeDriver();
-            driver.Manage().Timeouts().PageLoad = new TimeSpan(0,0,0,15);
+            //var chromeOptions = new ChromeOptions {
 
-            driver.Navigate().GoToUrl(url);
-            foreach(var command in test.Commands)
-            { 
-                try
-                {
-                    IWebElement element = null;
-                    switch (command.Comm)
-                    { 
-                      case "setWindowSize":
-                            driver.Manage().Window.Maximize();
-                            break;
-                        case "type":
-                            element = GetElement(command.Target,driver,TimeSpan.FromMinutes(1));
-                            element.SendKeys(command.Value);
-                            break;
+            //};
+            //var driver = new ChromeDriver();
+            //driver.Manage().Timeouts().PageLoad = new TimeSpan(0,0,0,15);
 
-                        case "click":
-                            element = driver.FindElement(By.CssSelector(command.Target.Replace("css=","")));
-                            Actions action = new Actions(driver);
-                            action.Click(element);
-                            action.Build().Perform();
-                           
-                            break;
+            //driver.Navigate().GoToUrl(url);
+            //foreach(var command in test.Commands)
+            //{ 
+            //    try
+            //    {
+            //        IWebElement element = null;
+            //        switch (command.Comm)
+            //        { 
+            //          case "setWindowSize":
+            //                driver.Manage().Window.Maximize();
+            //                break;
+            //            case "type":
+            //                element = GetElement(command.Target,driver,TimeSpan.FromMinutes(1));
+            //                element.SendKeys(command.Value);
+            //                break;
 
-                        case "pause":
-                            Thread.Sleep(int.Parse(command.Target));
-                            break;
-                }
+            //            case "click":
+            //                element = driver.FindElement(By.CssSelector(command.Target.Replace("css=","")));
+            //                Actions action = new Actions(driver);
+            //                action.Click(element);
+            //                action.Build().Perform();
 
-                }
-                catch (NoSuchElementException) { }
-                {
+            //                break;
 
-                }
-            }
-            driver.Close();
-            driver.Dispose();
-            return Content("Your Test has Passed");
+            //            case "pause":
+            //                Thread.Sleep(int.Parse(command.Target));
+            //                break;
+            //    }
+
+            //    }
+            //    catch (NoSuchElementException) { }
+            //    {
+
+            //    }
+            //}
+            //driver.Close();
+            //driver.Dispose();
+            //return Content("Your Test has Passed");
+            return View();
         }
 
         private List<IWebElement> GetElements(By by,IWebDriver driver,TimeSpan timeout)

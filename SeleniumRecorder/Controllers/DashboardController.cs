@@ -1,6 +1,5 @@
 ﻿using AWAIT.DAL;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,11 +8,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Models;
-using SeleniumRecorder.Services;
 using System.Diagnostics;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
 
 namespace SeleniumRecorder.Controllers
 {
@@ -47,15 +42,28 @@ namespace SeleniumRecorder.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult CreateTest()
-        {
-            return View();
-        }
         [HttpPost]
-        public IActionResult CreateTest(TestSuitViewModel testSuitView)
+        public async Task<IActionResult> CreateTest(TestSuitViewModel testSuitView)
         {
-            return View();
+            var suitModel = new SuitModel
+            {
+                SuitName = testSuitView.Suit!.SuitName,
+                SuitPlan = testSuitView.Suit.SuitPlan
+            };
+            var testModel = new TestModel
+            {
+                TestWebDriver = testSuitView.Test!.TestWebDriver,
+                TestName = testSuitView.Test.TestName,
+                TestType = testSuitView.Test.TestType,
+                TestUrl = testSuitView.Test.TestUrl,
+                SuitId = suitModel.SuitId,
+                Suit = suitModel
+            };
+            await _context.Suits.AddAsync(suitModel);
+            await _context.SaveChangesAsync();
+            await _context.Tests.AddAsync(testModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Recorder), new { url = testSuitView.Test.TestUrl});
         }
         [HttpGet]
         public async Task Playback()
@@ -74,7 +82,7 @@ namespace SeleniumRecorder.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
-        public async Task Recorder(string? url, TestSuitModel testSuitModel)
+        public async Task Recorder(string? url, TestSuitViewModel testSuitModel)
         {
             string webRootPath = _hostEnvironment.WebRootPath;
             string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");
@@ -137,36 +145,8 @@ namespace SeleniumRecorder.Controllers
         [HttpPost]
         public async Task Recorder([FromBody] dynamic eventResult)
         {
-            var webElementEventResult = JsonConvert.DeserializeObject<WebElementEventResult>(eventResult.ToString());
-
-            var eventDataModel = new EventDataModel
-            {
-                EventType = webElementEventResult.EventType,
-                Targets = new List<TargetModel>()
-            };
-
-            if (webElementEventResult.Target is JObject targetObject)
-            {
-                // Process the targets array
-                if (targetObject["targets"] is JArray targetsArray)
-                {
-                    foreach (JArray target in targetsArray)
-                    {
-                        var targetData = new TargetModel();
-                        var targetProperty = new ElementProperty
-                        {
-                            TargetModelId = targetData.Id,
-                            Key = target[0].ToString(),
-                            Value = target[1].ToString()
-                        };
-                        targetData.ElementProperties = new List<ElementProperty> { targetProperty };
-                        eventDataModel.Targets.Add(targetData);
-                    }
-                }
-            }
-            // Save Event to Db
-            _context.EventData!.Add(eventDataModel);
-            await _context.SaveChangesAsync();
+            var webJSON = JsonConvert.DeserializeObject<JSONModel>(eventResult.ToString());
+            Console.WriteLine($"{webJSON}");
         }
         /// <summary>
         /// Responsible for Monitoring URL Changes
