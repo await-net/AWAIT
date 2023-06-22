@@ -29,7 +29,6 @@ namespace AWAIT.DAL
         public string? TestUrl { get; set; }
 
         public int SuitId { get; set; }
-        public SuitModel? Suit { get; set; }
 
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SeleniumRecorder.Models
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace SeleniumRecorder.Models
 {
     public class SuitView
     {
@@ -20,5 +22,6 @@
         public List<SuitView>? SuitView { get; set; }
         public TestView? TestCreateView { get; set; }
         public SuitView? SuitRegisterView { get; set; }
+        public ConsoleViewModel? ConsoleView { get; set; }
     }
 }

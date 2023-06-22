@@ -1,6 +1,7 @@
 ﻿using AWAIT.DAL;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -9,6 +10,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Migrations;
 using SeleniumRecorder.Models;
+using System;
 using System.Diagnostics;
 
 namespace SeleniumRecorder.Controllers
@@ -35,10 +37,24 @@ namespace SeleniumRecorder.Controllers
         {
             return View();
         }
-        public IActionResult ToolBox()
+
+        public IActionResult ToolBox(SuitTestView model)
         {
             var viewModel = new SuitTestView();
-
+            if(model.ConsoleView != null)
+            {
+                viewModel.ConsoleView = model.ConsoleView;
+            }
+            else
+            {
+                var consoleDefault = new ConsoleViewModel
+                {
+                    Action = "Reach Potential With Your AWAIT TOOLBOX",
+                    Value = "Try Creating a New Test by Registering a Suit and Creating a New Test!\nUse Recorder Controls To Start Testing..."
+                };
+                viewModel.ConsoleView = consoleDefault;
+            }
+           
             var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
 
             try
@@ -85,8 +101,9 @@ namespace SeleniumRecorder.Controllers
             return View();
         }
         [HttpPost]
-        public async Task RegisterSuit(SuitTestView model)
+        public async Task<IActionResult> RegisterSuit(SuitTestView model)
         {
+            // [MOVE TO API]
             var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
             var registerSuit = new SuitModel
             {
@@ -94,19 +111,35 @@ namespace SeleniumRecorder.Controllers
                 SuitPlan = model.SuitRegisterView.SuitPlan,
                 UserId = user!.Id
             };
-            await _context.Suits.AddAsync(registerSuit);
+            _context.Suits.Add(registerSuit);
             await _context.SaveChangesAsync();
+
+            // Used to update view
+            SuitModel registeredSuit = new()
+            {
+                SuitName = model.SuitRegisterView!.SuitName,
+                SuitPlan = model.SuitRegisterView.SuitPlan
+            };
+
+            return Json(new { suit = registeredSuit });
         }
         [HttpPost]
         public async Task<IActionResult> CreateTest(SuitTestView model)
         {
+            // Update Console Recorder: Saving Test
+            var consoleModel = new ConsoleViewModel
+            {
+                Action = "save",
+                Value = "Saving Test Model..."
+            };            
+
             string testUrl = model.TestCreateView!.TestUrl!;
             string suitName = model.TestCreateView.SuitName!;
 
             // Compile Valid URL for Driver:
             if (!testUrl.StartsWith("https://"))
             {
-                _ = testUrl!.Insert(0, "https://");
+                testUrl = testUrl!.Insert(0, "https://");
             }
 
             // Suit Name Db Lookup => SuitId
@@ -118,14 +151,21 @@ namespace SeleniumRecorder.Controllers
                 TestName = model.TestCreateView.TestName,
                 TestType = model.TestCreateView.TestType,
                 TestUrl = testUrl,
-                SuitId = selectedSuit!.SuitId,
-                Suit = selectedSuit
+                SuitId = selectedSuit!.SuitId
                 
             };
 
-            await _context.Tests.AddAsync(createTest);
+            _context.Tests.Add(createTest);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Recorder), new { url = testUrl });
+
+            // Update Console Recorder: Saving Test
+            consoleModel = new ConsoleViewModel
+            {
+                Action = $"Successfully Created Test({createTest.TestType}): '{createTest.TestName}'",
+                Value = $"Click Start to Navigate to: {createTest.TestUrl}"
+            };
+            return Json(new { test = consoleModel });
+
         }
         [HttpGet]
         public async Task Playback()
@@ -135,6 +175,10 @@ namespace SeleniumRecorder.Controllers
             selenium.Index(1);
             ViewBag.Console = "Started IDR Login Playback";
 
+        }
+        public ActionResult InitRecorder()
+        {
+            return View();
         }
         /// <summary>
         /// Responsible for Starting Recorder Script Files & Relevant Monitoring Systems
