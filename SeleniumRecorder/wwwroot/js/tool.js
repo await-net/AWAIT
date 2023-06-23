@@ -21,27 +21,27 @@ tools.forEach((tool) => {
         // Change the button text based on the current condition
         console.log(recorder.id);
         const icon = tool.querySelector('.bi');
-        if (icon.classList.contains('bi-box-arrow-in-down')) {
-            icon.classList.remove('bi-box-arrow-in-down');
-            icon.classList.add('bi-box-arrow-up');
-            tool.innerHTML = '<i class="bi bi-box-arrow-right"></i> Unload Tool';
-            prompt.classList.add('hidden');
-            prompt.classList.remove('visible');
-            console.log(recorder.id);
-            if (tool.id == 'recorderTool') {
-                recorder.classList.remove('show');
+        if (icon != null) {
+            if (icon.classList.contains('bi-box-arrow-in-down')) {
+                icon.classList.remove('bi-box-arrow-in-down');
+                icon.classList.add('bi-box-arrow-up');
+                tool.innerHTML = '<i class="bi bi-box-arrow-right"></i> Unload Tool';
+                prompt.classList.add('hidden');
+                prompt.classList.remove('visible');
+                console.log(recorder.id);
+                if (tool.id == 'recorderTool') {
+                    recorder.classList.remove('show');
+                }
+            } else {
+                console.log(recorder.id);
+                icon.classList.remove('bi-box-arrow-right');
+                icon.classList.add('bi-box-arrow-in-down');
+                tool.innerHTML = '<i class="bi bi-box-arrow-in-down"></i> Load Tool';
+                if (tool.id == 'recorderTool') {
+                    recorder.classList.add('show');
+
+                }
             }
-
-        } else {
-            console.log(recorder.id);
-            icon.classList.remove('bi-box-arrow-right');
-            icon.classList.add('bi-box-arrow-in-down');
-            tool.innerHTML = '<i class="bi bi-box-arrow-in-down"></i> Load Tool';
-            if (tool.id == 'recorderTool') {
-                recorder.classList.add('show');
-
-            }
-
         }
     });
 });
@@ -60,7 +60,7 @@ tabLinks.forEach((tabLink) => {
         selectedTabContent.classList.add('show');
     });
 });
-// DOM LOAD
+// DOM LOAD: PLACEHOLDERS
 window.addEventListener('load', () => {
     console.log = () => { };
     var placeholders = document.querySelectorAll('#placeholder');
@@ -74,51 +74,58 @@ window.addEventListener('load', () => {
 });
 // RECORDER - START, STOP & SAVE
 $(document).ready(function () {
-    const toastLiveExample = document.getElementById('notification');
-    const toastTrigger = document.getElementById('startWebDriver');
-
+    const toastBody = document.querySelector('.toast-body');
+    // ENABLE START
+    $("#selectRecorder select").change(function () {
+        var selectedRecorder = $(this).val();
+        if (selectedRecorder) {
+            $("#startWebDriver").prop("disabled", false);
+        } else {
+            $("#startWebDriver").prop("disabled", true);
+        }
+    });
+    // START
     $("#startWebDriver").click(function (e) {
         e.preventDefault();
-        // Get Stop Button
-        const stopWebDriver = document.querySelector('#stopWebDriver');
-        // Get URL Input
-        var url = $("#newURLValue").val();
+        // Get the selected value from the dropdown
+        var targetUrl = $("#selectRecorder select").val();
         $.ajax({
             url: "/Dashboard/Recorder",
-            method: "GET",
-            data: { url: url, stop: false },
+            type: "GET",
+            data: {url: targetUrl},
             success: function (response) {
-                console.log(response);
+                if (toastBody) {
+                    toastBody.textContent = 'Recorder STARTED successfully!';
+                }
+                var toastElement = document.getElementById("notification");
+                var toast = new bootstrap.Toast(toastElement);
+                toast.show();
             },
             error: function (xhr, status, error) {
-                console.error(error, status, xhr);
+                // Handle the error response here
+                console.log("Error: " + error);
             }
         });
-        // Update Buttons ariaDisabled
+        // Update Save Button so that it is no longer disabled
         stopWebDriver.disabled = false;
+        // Disable Stop Button
         this.disabled = true;
-        // Find the toast body element by its class
-        const toastBody = document.querySelector('.toast-body');
-
-        // Check if the toast body element exists
-        if (toastBody) {
-            // Change the text content of the toast body element
-            toastBody.textContent = 'Tool has Started Recording!';
-        }
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-        toastBootstrap.show()
-
     });
-
+    // STOP
     $("#stopWebDriver").click(function (e) {
         e.preventDefault();
         // Get Save Button
         const saveWebDriver = document.querySelector('#saveWebDriver');
         $.ajax({
             url: "/Dashboard/StopRecorder",
-            method: "GET",
+            method: "POST",
             success: function (response) {
-                console.log(response);
+                if (toastBody) {
+                    toastBody.textContent = 'Recorder STOPPED successfully! Click SAVE to keep recording...';
+                }
+                var toastElement = document.getElementById("notification");
+                var toast = new bootstrap.Toast(toastElement);
+                toast.show();
             },
             error: function (xhr, status, error) {
                 console.error(error, status, xhr);
@@ -129,7 +136,7 @@ $(document).ready(function () {
         // Disable Stop Button
         this.disabled = true;
     });
-
+    // SAVE
     $("#saveWebDriver").click(function (e) {
         e.preventDefault();
         // Get Start Button
@@ -148,13 +155,7 @@ $(document).ready(function () {
                 console.error(error, status, xhr);
             }
         });
-    });    
-    //if (toastTrigger) {
-      //  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-        //toastTrigger.addEventListener('click', () => {
-          //  toastBootstrap.show()
-        //});
-    //}
+    });
 });
 // PLAYBACK - START
 $(document).ready(function () {

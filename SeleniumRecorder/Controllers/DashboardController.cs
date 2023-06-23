@@ -1,16 +1,13 @@
 ﻿using AWAIT.DAL;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
-using SeleniumRecorder.Migrations;
 using SeleniumRecorder.Models;
-using System;
 using System.Diagnostics;
 
 namespace SeleniumRecorder.Controllers
@@ -95,6 +92,7 @@ namespace SeleniumRecorder.Controllers
                     .Where(s => suitIds.Contains(s.SuitId))
                     .Select(s => new TestView
                     {
+                        TestId = s.Id,
                         TestWebDriver = s.TestWebDriver,
                         TestName = s.TestName,
                         TestType = s.TestType,
@@ -248,7 +246,6 @@ namespace SeleniumRecorder.Controllers
             var cService = ChromeDriverService.CreateDefaultService(chromeDriverPath);
             var options = new ChromeOptions();
             _webDriver = new ChromeDriver(cService, options);
-            Console.WriteLine($"{cService.ProcessId}");
             // Navigate to URL
             if (url != null)
             {
@@ -257,7 +254,19 @@ namespace SeleniumRecorder.Controllers
             }
 
             // Get the Process ID
-            int pid = cService.ProcessId;
+            var pid = cService.ProcessId;
+            const string cookieName = "web-driver-pid";
+            var requestCookies = _httpContextAccessor.HttpContext!.Request.Cookies;
+            var intialRequest = requestCookies[cookieName];
+            // Create/Update Cookie WebDriver PID
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTimeOffset.Now.AddDays(1),
+                IsEssential = true
+
+            };
+            _httpContextAccessor.HttpContext!.Response.Cookies
+                        .Append(cookieName, pid.ToString(), cookieOptions);
 
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_webDriver;
             // Maximum wait time for the script execution
@@ -340,23 +349,23 @@ namespace SeleniumRecorder.Controllers
         /// <summary>
         /// Responsible for Disposing WebDriver & Preventing Memory Leaks
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         public IActionResult StopRecorder()
         {
-            // Retrieve the cookie
-            if (Request.Cookies.TryGetValue("WebDriverPID", out string? cookieValue))
+            const string cookieName = "web-driver-pid";
+            var requestCookies = _httpContextAccessor.HttpContext!.Request.Cookies;
+            var intialRequest = requestCookies[cookieName];
+            if (intialRequest != null)
             {
                 // Parse the PID from the cookie value
-                int pid = int.Parse(cookieValue!);
+                int pid = int.Parse(intialRequest!);
 
                 // Get the process using the stored PID
                 Process process = Process.GetProcessById(pid);
 
                 // Kill the process
                 process.Kill();
-                Console.WriteLine(cookieValue);
-
-                return Ok();
+                return new JsonResult(process.ExitCode);
             }
             else
             {

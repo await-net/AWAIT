@@ -139,8 +139,33 @@
                         <div class="row p-2">
                             <!--RECORDER-HEADING-->
                             <div class="col-12 p-2">
-                                <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-center">
-                                    <p class="h5 p-2 text-center">Recording Tool Loaded!</p>
+                                <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-left">                                    
+                                    <form id="selectRecorder">
+                                        <div class="mb-3">
+                                            <label for="recoders" class="form-label">Selected Recorder</label>
+                                            <div class="input-group mb-3">
+                                                <select class="form-select" aria-label="selectRecorder">
+                                                    <option selected>Select Recorder</option>
+                                                    @foreach (var recorder in Model.TestView!)
+                                                    {
+                                                        <option value="@recorder.TestUrl">@recorder.TestName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Recorder Controls:</label>
+                                            <div class="input-group mb-3">
+                                                <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                                                    <button type="button" class="btn btn-outline-success" id="startWebDriver" disabled>
+                                                        Start
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
+                                                    <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                             <!--RECORDER-TAB-NAVIGATION-->
@@ -243,22 +268,11 @@
                                                 <p class="h4 p-2 text-secondary-emphasis d-flex flex-row align-items-center justify-content-start">
                                                     Recorder Controls
                                                 </p>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="input-group">
-                                                    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
-                                                        <button type="button" class="btn btn-outline-success" id="startWebDriver" disabled>
-                                                            Start
-                                                        </button>
-                                                        <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
-                                                        <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </div>                                            
                                         </div>
                                         <hr>
                                     </div>
-                                    <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
+                                    <!--MANAGE-RECORDER-TAB-CONTENT-->
                                     <div class="tab-pane fade show" id="recorderManage">
                                         <!--RECORDER-MANAGE-HEADING-->
                                         <div class="text-body-secondary p-2">
@@ -510,6 +524,7 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 @section Scripts {
     <script src="~/js/tool.js" asp-append-version="true"></script>
     <script src="~/js/console.js" asp-append-version="true"></script>

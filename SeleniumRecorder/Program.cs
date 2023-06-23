@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // COOKIES
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddMvcCore().AddViews().AddCookieTempDataProvider();
 // SESSION
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
