@@ -30,8 +30,6 @@ tools.forEach((tool) => {
             console.log(recorder.id);
             if (tool.id == 'recorderTool') {
                 recorder.classList.remove('show');
-
-
             }
 
         } else {
@@ -47,9 +45,8 @@ tools.forEach((tool) => {
         }
     });
 });
-// Get all the tab links inside the .nav.nav-tabs element
 const tabLinks = document.querySelectorAll('.nav.nav-tabs .nav-link');
-// Add click event listener to each tab link
+// HIDE/SHOW Tabs
 tabLinks.forEach((tabLink) => {
     tabLink.addEventListener('click', (e) => {
         e.preventDefault();
@@ -63,6 +60,7 @@ tabLinks.forEach((tabLink) => {
         selectedTabContent.classList.add('show');
     });
 });
+// DOM LOAD
 window.addEventListener('load', () => {
     console.log = () => { };
     var placeholders = document.querySelectorAll('#placeholder');
@@ -74,6 +72,7 @@ window.addEventListener('load', () => {
         }
     });
 });
+// RECORDER - START, STOP & SAVE
 $(document).ready(function () {
     const toastLiveExample = document.getElementById('notification');
     const toastTrigger = document.getElementById('startWebDriver');
@@ -157,7 +156,7 @@ $(document).ready(function () {
         //});
     //}
 });
-
+// PLAYBACK - START
 $(document).ready(function () {
     $("#idrLoginPlay").click(function (e) {
         e.preventDefault();
@@ -173,4 +172,177 @@ $(document).ready(function () {
         });
     });
 });
+// SUIT REGISTRATION
+$(document).ready(function () {
+    $("#registerSuit").submit(function (e) {
+        e.preventDefault(); // Prevent form submission
 
+        // Serialize the form data
+        var formData = $(this).serialize();
+
+        // Send an AJAX request to the RegisterSuit action
+        $.ajax({
+            url: "/Dashboard/RegisterSuit",
+            type: "POST",
+            data: formData,
+            success: function (result) {
+                // Update the dropdown with the newly registered suit
+                var newSuit = result.suit;
+                var optionText = newSuit.suitName + " | " + newSuit.suitPlan;
+                var newOption = $("<option>").attr("value", newSuit.suitName).text(optionText);
+                $("#suitNameSelect").append(newOption);
+                $("#suitNameSelect").val(newSuit.suitName);
+                $("#createNewSuit").offcanvas("hide");
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    });
+});
+// TEST CREATION VALIDATE
+$("#createTest").submit(function (e) {
+    var isValid = this.checkValidity(); // Check if the form is valid
+    if (!isValid) {
+        e.preventDefault(); // Prevent form submission if there are validation errors
+        showValidationErrors();
+    }
+});
+// CONSOLE
+$(document).ready(function () {
+    var delay = 500;
+    $('.card').each(function (index) {
+        var card = $(this);
+        setTimeout(function () {
+            card.removeClass('hidden').addClass('visible');
+        }, index * delay);
+    });
+
+    const consoleOutput = document.querySelector('.console-output');
+    const consoleCursor = document.querySelector('.console-cursor');
+    let actions = ['AWAIT - TOOLBOX!'];
+    let index = 0;
+
+    // Animate typing effect
+    function typeText(text) {
+        const characters = text.split('');
+        let delay = 0;
+
+        characters.forEach((char, i) => {
+            delay += 100; // Interval for typing
+
+            setTimeout(() => {
+                consoleOutput.textContent += char;
+                updateCursorPosition();
+            }, delay);
+        });
+
+        setTimeout(() => {
+            backspaceText(text);
+        }, delay + 1000);
+    }
+
+    // Animate backspacing effect
+    function backspaceText(text) {
+        const characters = text.split('');
+        let delay = 0;
+
+        characters.forEach((char, i) => {
+            delay += 50;
+
+            setTimeout(() => {
+                consoleOutput.textContent = consoleOutput.textContent.slice(0, -1);
+                updateCursorPosition();
+            }, delay);
+        });
+
+        setTimeout(() => {
+            index = (index + 1) % actions.length;
+            const nextText = actions[index];
+            typeText(nextText);
+        }, delay + 500);
+    }
+
+    // Update console cursor position
+    function updateCursorPosition() {
+        const consoleText = consoleOutput.textContent;
+        const consoleTextLength = consoleText.length;
+
+        if (consoleTextLength === 0) {
+            consoleCursor.style.marginLeft = '0';
+        } else {
+            const lastCharacter = consoleOutput.lastChild;
+            if (lastCharacter instanceof Element) {
+                const rect = lastCharacter.getBoundingClientRect();
+                const marginLeft = rect.right + 'px';
+                consoleCursor.style.marginLeft = marginLeft;
+            }
+        }
+    }
+
+    // Start printing text once loaded
+    const initialText = actions[index];
+    typeText(initialText);
+
+    // CREATE TEST
+    $("#createTest").submit(function (e) {
+        e.preventDefault(); // Prevent form submission
+
+        // Serialize the form data
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: "/Dashboard/CreateTest",
+            type: "POST",
+            data: formData,
+            success: function (result) {
+                // Check if the response contains an error
+                if (result.error) {
+                    // Handle the case when the suit name already exists
+                    console.log("Error: " + result.error);
+
+                    // Show an error notification to the user
+                    const toastBody = document.querySelector('.toast-body');
+                    if (toastBody) {
+                        toastBody.textContent = 'Suit Name Already Exists!';
+                    }
+                    var toastElement = document.getElementById("notification");
+                    var toast = new bootstrap.Toast(toastElement);
+                    toast.show();
+                } else {
+                    // Handle the successful case
+                    console.log(result);
+
+                    // Disable the "Save" button
+                    $(".btn-outline-info").prop("disabled", true);
+                    $(".btn-outline-info").prop("value", "SAVED!");
+
+                    // Update the actions
+                    actions = [result.test.action];
+
+                    var startButton = $("#startWebDriver");
+                    startButton.prop("disabled", false);
+                    startButton.addClass("btn-outline-success");
+                    startButton.addClass("pulse-animation");
+
+                    // Show the success notification
+                    const toastBody = document.querySelector('.toast-body');
+                    if (toastBody) {
+                        toastBody.textContent = 'Successfully Created Test!';
+                    }
+                    var toastElement = document.getElementById("notification");
+                    var toast = new bootstrap.Toast(toastElement);
+                    toast.show();
+
+                    // Hide the form or perform any other actions
+                    $("#createNewSuit").offcanvas("hide");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+
+    });
+
+});

@@ -148,15 +148,15 @@
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item">
                                         <a href="#0" class="nav-link active" data-bs-toggle="tab" data-bs-target="#record"
-                                           aria-controls="record" aria-selected="false">Setup a New Recorder</a>
+                                           aria-controls="record" aria-selected="false">Setup New Recorder</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#recorderManage"
+                                           aria-controls="config" aria-selected="false">Manage Recorders</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#config"
-                                           aria-controls="config" aria-selected="false">Manage Your Recordings</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#config"
-                                           aria-controls="config" aria-selected="false">Advanced Setup & Configuration</a>
+                                           aria-controls="config" aria-selected="false">Advanced</a>
                                     </li>
                                 </ul>
                             </div>
@@ -164,17 +164,16 @@
                                 <!--RECORDER-TAB-CONTENT-->
                                 <div class="tab-content p-2">
                                     <div class="tab-pane fade show active" id="record">
-
-                                        <!--RECORDER-HEADING-->
+                                        <!--NEW-RECORDER-HEADING-->
                                         <div class="text-body-secondary p-2">
                                             <figure>
                                                 <blockquote class="blockquote">
                                                 </blockquote>
                                                 <figcaption class="blockquote-footer">
                                                     <p class="lead h5">
-                                                        Setup Recorder<br>
+                                                        Setup New Recorder<br>
                                                         <small class="text-body-secondary font-monospace">
-                                                            Setup recorder & begin interacting with the targeted website or webpage.
+                                                            Setup recorder & begin interacting with the targeted Website/Web-Application to generate your automated test.
                                                         </small>
                                                 </figcaption>
                                             </figure>
@@ -248,7 +247,7 @@
                                             <div class="p-2">
                                                 <div class="input-group">
                                                     <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
-                                                        <button type="button" class="btn btn-outline-success" id="startWebDriver">
+                                                        <button type="button" class="btn btn-outline-success" id="startWebDriver" disabled>
                                                             Start
                                                         </button>
                                                         <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
@@ -260,17 +259,109 @@
                                         <hr>
                                     </div>
                                     <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
-                                    <div class="tab-content p-2">
-                                        <div class="tab-pane fade show" id="config">
-                                            <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
+                                    <div class="tab-pane fade show" id="recorderManage">
+                                        <!--RECORDER-MANAGE-HEADING-->
+                                        <div class="text-body-secondary p-2">
+                                            <figure>
+                                                <blockquote class="blockquote">
+                                                </blockquote>
+                                                <figcaption class="blockquote-footer">
+                                                    <p class="lead h5">
+                                                        Manage Recorders<br>
+                                                        <small class="text-body-secondary font-monospace">
+                                                            Change equipped recorder, remove a recorder, update a recorder details and switch suits.
+                                                        </small>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                        <div class="row g-2">                                            
+                                            <div class="list-group">
+                                                @if(Model.TestView!.Count() <= 0)
+                                                {
+                                                    <div class="text-body-secondary p-2">
+                                                        <p><i class="bi bi-asterisk"></i> NO RECORDERS FOUND!</p>
+                                                        <p>Please Setup New Recorder.</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    @foreach (var recorder in Model.TestView!)
+                                                    {
+                                                        <hr>
+                                                        <a class="list-group-item list-group-item-action disabled">@recorder.TestName</a>
+                                                        <a href="#" class="list-group-item list-group-item-action" aria-current="false" data-bs-toggle="collapse"
+                                                           data-bs-target="#@recorder.TestId" aria-expanded="false" aria-controls="@recorder.TestId">
+                                                            Recorder Details <i class="bi bi-box-arrow-in-down"></i>
+                                                        </a>
+                                                        <div class="collapse collapse-horizontal" id="@recorder.TestId">
+                                                            <div class="card card-body">
+                                                                <form>
+                                                                    <div class="mb-3">
+                                                                        <label for="Suit" class="form-label">Suit</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <select class="form-select" aria-label="Suit">
+                                                                                <option selected>@recorder.SuitName</option>
+                                                                                <option value="1">Can not change in current suit!</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="Driver" class="form-label">Web Driver</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <select class="form-select" aria-label="WebDriver">
+                                                                                <option selected>@recorder.TestWebDriver</option>
+                                                                                <option value="1">Not available in current suit!</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="TestName" class="form-label">Test Name</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <input type="text" class="form-control" placeholder="Recorder Name"
+                                                                                   aria-describedby="recorder name property" value="@recorder.TestName">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="TestType" class="form-label">Recorder Type</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <select class="form-select" aria-label="Web Type">
+                                                                                <option selected>@recorder.TestType</option>
+                                                                                <option value="1">Can not change in current suit!</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="TestDescription" class="form-label">Description</label>
+                                                                        <div class="input-group">
+                                                                            <textarea class="form-control" aria-label="recorder description property">@recorder.TestDescription</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="TestUrl" class="form-label">Recorder Start URL</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <input type="text" class="form-control" placeholder="Recorder Start URL"
+                                                                                   aria-describedby="recorder start property" value="@recorder.TestUrl">
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }                                                
+                                            </div>
                                         </div>
                                         <hr>
                                     </div>
+                                    <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
+                                    <div class="tab-pane fade show" id="config">
+                                        <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
+                                    </div>
+                                    <hr>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="createNewSuit" aria-labelledby="createNewSuitLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="createNewSuitLabel">Register Suit</h5>
@@ -363,37 +454,38 @@
                                 </figure>
                             </div>
                             <!--PLAYBACK-BODY-->
-                            <div class="list-group list-group-flush">
-                                <a data-bs-toggle="collapse" href="#defaultsuitplayback" role="button"
-                                   aria-expanded="false" aria-controls="defaultsuitplayback"
-                                   class="list-group-item list-group-item-action">
-                                    <span class="lead font-monospace">IDR Login Playback </span><span class="navbar-toggler-icon"></span>
-                                </a>
-                                <div class="collapse multi-collapse p-1" id="defaultsuitplayback">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button" id="idrLoginPlay"
-                                                        class="btn btn-outline-primary button-click-animation align-items-center justify-content-start"
-                                                        onclick="@Url.Action("Playback","Dashboard")">
-                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
-                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
-                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
-                                                </button>
+                            <div class="list-group list-group-flush">    
+                                    <a data-bs-toggle="collapse" href="#" role="button"
+                                       aria-expanded="false" aria-controls="#"
+                                       class="list-group-item list-group-item-action">
+                                        <span class="lead font-monospace"> </span><span class="navbar-toggler-icon"></span>
+                                    </a>
+                                    <div class="collapse multi-collapse p-1" id="#">
+                                        <div class="row">
+                                            <div class="col d-flex align-items-center justify-content-center">
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button" id="play"
+                                                            class="btn btn-outline-primary button-click-animation align-items-center justify-content-start"
+                                                            onclick="@Url.Action("Playback", "Dashboard", new { testName = "#" })">
+                                                        <small>PLAY</small> <i class="bi bi-play-btn"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button"
+                                                            class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
+                                                        <small>VIEW</small> <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
+                                                        <small>REMOVE</small> <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                         <hr>
@@ -418,151 +510,6 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var delay = 500;
-        $('.card').each(function (index) {
-            var card = $(this);
-            setTimeout(function () {
-                card.removeClass('hidden').addClass('visible');
-            }, index * delay);
-        });
-
-        const consoleOutput = document.querySelector('.console-output');
-        const consoleCursor = document.querySelector('.console-cursor');
-        let actions = ['AWAIT - TOOLBOX!'];
-        let index = 0;
-
-        // Animate typing effect
-        function typeText(text) {
-            const characters = text.split('');
-            let delay = 0;
-
-            characters.forEach((char, i) => {
-                delay += 100; // Interval for typing
-
-                setTimeout(() => {
-                    consoleOutput.textContent += char;
-                    updateCursorPosition();
-                }, delay);
-            });
-
-            setTimeout(() => {
-                backspaceText(text);
-            }, delay + 1000);
-        }
-
-        // Animate backspacing effect
-        function backspaceText(text) {
-            const characters = text.split('');
-            let delay = 0;
-
-            characters.forEach((char, i) => {
-                delay += 50;
-
-                setTimeout(() => {
-                    consoleOutput.textContent = consoleOutput.textContent.slice(0, -1);
-                    updateCursorPosition();
-                }, delay);
-            });
-
-            setTimeout(() => {
-                index = (index + 1) % actions.length;
-                const nextText = actions[index];
-                typeText(nextText);
-            }, delay + 500);
-        }
-
-        // Update console cursor position
-        function updateCursorPosition() {
-            const consoleText = consoleOutput.textContent;
-            const consoleTextLength = consoleText.length;
-
-            if (consoleTextLength === 0) {
-                consoleCursor.style.marginLeft = '0';
-            } else {
-                const lastCharacter = consoleOutput.lastChild;
-                if (lastCharacter instanceof Element) {
-                    const rect = lastCharacter.getBoundingClientRect();
-                    const marginLeft = rect.right + 'px';
-                    consoleCursor.style.marginLeft = marginLeft;
-                }
-            }
-        }
-
-        // Start printing text once loaded
-        const initialText = actions[index];
-        typeText(initialText);
-
-        // Continue with your existing AJAX code
-        $("#createTest").submit(function (e) {
-            e.preventDefault(); // Prevent form submission
-
-            // Serialize the form data
-            var formData = $(this).serialize();
-
-            // Send an AJAX request to the CreateTest action
-            $.ajax({
-                url: "/Dashboard/CreateTest",
-                type: "POST",
-                data: formData,
-                success: function (result) {
-                    console.log(result);
-
-                    // Disable the "Save" button
-                    $(".btn-outline-info").prop("disabled", true);
-
-                    // Update the actions
-                    actions = [result.test.action];         
-
-                    // Enable and highlight the "Start" button with pulsing green animation
-                    var startButton = $("#startWebDriver");
-                    startButton.prop("disabled", false);
-                    startButton.addClass("btn-outline-success");
-                    startButton.addClass("pulse-animation");
-
-                    // Hide the form or perform any other actions if needed
-                    $("#createNewSuit").offcanvas("hide");
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error: " + error);
-                }
-            });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $("#registerSuit").submit(function (e) {
-            e.preventDefault(); // Prevent form submission
-
-            // Serialize the form data
-            var formData = $(this).serialize();
-
-            // Send an AJAX request to the RegisterSuit action
-            $.ajax({
-                url: "/Dashboard/RegisterSuit",
-                type: "POST",
-                data: formData,
-                success: function (result) {
-                    // Update the dropdown with the newly registered suit
-                    var newSuit = result.suit;
-                    var optionText = newSuit.suitName + " | " + newSuit.suitPlan;
-                    var newOption = $("<option>").attr("value", newSuit.suitName).text(optionText);
-                    $("#suitNameSelect").append(newOption);
-                    $("#suitNameSelect").val(newSuit.suitName); // Optionally select the new option
-                    $("#createNewSuit").offcanvas("hide");
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error: " + error);
-                }
-            });
-        });
-    });
-
-</script>
-
-
 @section Scripts {
     <script src="~/js/tool.js" asp-append-version="true"></script>
     <script src="~/js/console.js" asp-append-version="true"></script>

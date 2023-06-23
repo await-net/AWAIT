@@ -73,11 +73,11 @@ namespace SeleniumRecorder.Migrations
 
             modelBuilder.Entity("AWAIT.DAL.SuitModel", b =>
                 {
-                    b.Property<int>("SuitId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SuitId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("SuitName")
                         .HasColumnType("nvarchar(max)");
@@ -85,15 +85,12 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("SuitPlan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserModelId")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("SuitId");
-
-                    b.HasIndex("UserModelId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Suits", (string)null);
                 });
@@ -137,9 +134,6 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("TargetTypeId");
 
                     b.HasIndex("TargetModelTargetId");
@@ -149,14 +143,17 @@ namespace SeleniumRecorder.Migrations
 
             modelBuilder.Entity("AWAIT.DAL.TestModel", b =>
                 {
-                    b.Property<int>("TestId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("SuitId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TestDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestName")
                         .HasColumnType("nvarchar(max)");
@@ -170,9 +167,7 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("TestWebDriver")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TestId");
-
-                    b.HasIndex("SuitId");
+                    b.HasKey("Id");
 
                     b.ToTable("Tests", (string)null);
                 });
@@ -236,9 +231,13 @@ namespace SeleniumRecorder.Migrations
 
             modelBuilder.Entity("AWAIT.DAL.SuitModel", b =>
                 {
-                    b.HasOne("AWAIT.DAL.UserModel", null)
+                    b.HasOne("AWAIT.DAL.UserModel", "User")
                         .WithMany("Suits")
-                        .HasForeignKey("UserModelId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TargetTypeModel", b =>
@@ -246,17 +245,6 @@ namespace SeleniumRecorder.Migrations
                     b.HasOne("AWAIT.DAL.TargetModel", null)
                         .WithMany("Targets")
                         .HasForeignKey("TargetModelTargetId");
-                });
-
-            modelBuilder.Entity("AWAIT.DAL.TestModel", b =>
-                {
-                    b.HasOne("AWAIT.DAL.SuitModel", "Suit")
-                        .WithMany()
-                        .HasForeignKey("SuitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Suit");
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TargetModel", b =>

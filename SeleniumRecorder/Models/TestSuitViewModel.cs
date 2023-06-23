@@ -9,12 +9,15 @@ namespace SeleniumRecorder.Models
     }
     public class TestView
     {
+        public int TestId { get; set; }
         public string? TestWebDriver { get; set; }
         public string? TestName { get; set; }
         public string? TestType { get; set; }
         public string? TestDescription { get; set; }
         public string? TestUrl { get; set; }
-        public string? SuitName { get; set;}
+        
+        public int SuitId { get; set;}
+        public string? SuitName { get; set; }
     }
     public class SuitTestView
     {

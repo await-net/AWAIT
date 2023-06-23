@@ -26,22 +26,21 @@ namespace SeleniumRecorder.Controllers
         public ThreadLocal<IWebDriver> DriverThread;
         public IWebDriver? _webDriver;
         public int _processId = -1;
-
         public DashboardController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor, AwaitDbContext context)
         {
             _hostEnvironment = hostEnvironment;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
+
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult ToolBox(SuitTestView model)
         {
             var viewModel = new SuitTestView();
-            if(model.ConsoleView != null)
+            if (model.ConsoleView != null)
             {
                 viewModel.ConsoleView = model.ConsoleView;
             }
@@ -54,7 +53,7 @@ namespace SeleniumRecorder.Controllers
                 };
                 viewModel.ConsoleView = consoleDefault;
             }
-           
+
             var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
 
             try
@@ -64,8 +63,8 @@ namespace SeleniumRecorder.Controllers
                     SuitName = s.SuitName,
                     SuitPlan = s.SuitPlan
                 }).ToList();
-                
-                if(suits.Count() > 0)
+
+                if (suits.Count() > 0)
                 {
                     viewModel.SuitView = suits;
                 }
@@ -82,18 +81,57 @@ namespace SeleniumRecorder.Controllers
                     viewModel.SuitView = defaultSuit;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                var defaultSuit = new List<SuitView>
-                {
-                    new SuitView
-                    {
-                        SuitName = "Please Register Suit",
-                        SuitPlan = ""
-                    }
-                };
-                viewModel.SuitView = defaultSuit;
+                Console.Write(ex.ToString());
             }
+
+            // Get tests and populate view model
+            try
+            {
+                var suitIds = _context.Suits.Where(s => s.UserId == user!.Id).Select(s => s.Id).ToList();
+
+                var tests = _context.Tests
+                    .Where(s => suitIds.Contains(s.SuitId))
+                    .Select(s => new TestView
+                    {
+                        TestWebDriver = s.TestWebDriver,
+                        TestName = s.TestName,
+                        TestType = s.TestType,
+                        TestDescription = s.TestDescription,
+                        TestUrl = s.TestUrl,
+                        SuitId = s.SuitId,
+                        SuitName = "Demo Testæ"
+                    })
+                    .ToList();
+
+
+                if (tests.Count() > 0)
+                {
+                    viewModel.TestView = tests;
+                }
+                else
+                {
+                    var defaultTest = new List<TestView>
+                    {
+                        new TestView
+                        {
+                            TestWebDriver = "",
+                            TestName = "No Tests Created Yet!",
+                            TestDescription = "Select/Register Suit and Create New Recorder...",
+                            TestUrl = "www.example.com",
+                            SuitId = 0,
+                            SuitName = ""
+                        }
+                    };
+                    viewModel.TestView = defaultTest;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+
             return View(viewModel);
         }
         public IActionResult Settings()
@@ -103,22 +141,32 @@ namespace SeleniumRecorder.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterSuit(SuitTestView model)
         {
-            // [MOVE TO API]
-            var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
+            var user = _context.Users.FirstOrDefault(s => s.UserName == "JohnDoe");
+            var suits = _context.Suits.Where(s => s.UserId == user!.Id).ToList();
             var registerSuit = new SuitModel
             {
-                SuitName = model.SuitRegisterView!.SuitName,
-                SuitPlan = model.SuitRegisterView.SuitPlan,
+                SuitName = model.SuitRegisterView?.SuitName,
+                SuitPlan = model.SuitRegisterView?.SuitPlan,
                 UserId = user!.Id
             };
+
+            foreach (var suit in suits)
+            {
+                if (suit.SuitName == registerSuit.SuitName)
+                {
+                    // Return a JSON response indicating that the suit name already exists
+                    return Json(new { error = "SUIT NAME ALREADY EXISTS" });
+                }
+            }
+
             _context.Suits.Add(registerSuit);
             await _context.SaveChangesAsync();
 
             // Used to update view
             SuitModel registeredSuit = new()
             {
-                SuitName = model.SuitRegisterView!.SuitName,
-                SuitPlan = model.SuitRegisterView.SuitPlan
+                SuitName = model.SuitRegisterView?.SuitName,
+                SuitPlan = model.SuitRegisterView?.SuitPlan
             };
 
             return Json(new { suit = registeredSuit });
@@ -151,7 +199,8 @@ namespace SeleniumRecorder.Controllers
                 TestName = model.TestCreateView.TestName,
                 TestType = model.TestCreateView.TestType,
                 TestUrl = testUrl,
-                SuitId = selectedSuit!.SuitId
+                TestDescription = model.TestCreateView.TestDescription,
+                SuitId = selectedSuit!.Id
                 
             };
 
@@ -165,10 +214,9 @@ namespace SeleniumRecorder.Controllers
                 Value = $"Click Start to Navigate to: {createTest.TestUrl}"
             };
             return Json(new { test = consoleModel });
-
         }
         [HttpGet]
-        public async Task Playback()
+        public async Task Playback(string? testName)
         {
             Console.WriteLine("PLAYBACK!");
             SeleniumController selenium = new();

@@ -59,7 +59,6 @@ namespace SeleniumRecorder.Controllers
             //return Content("Your Test has Passed");
             return View();
         }
-
         private List<IWebElement> GetElements(By by,IWebDriver driver,TimeSpan timeout)
         {
             try
@@ -70,7 +69,6 @@ namespace SeleniumRecorder.Controllers
             }
             catch (TimeoutException) { return null; }
         }
-
         private IWebElement GetElement(string target, IWebDriver driver, TimeSpan timeout)
         {
             try
