@@ -1,0 +1,12 @@
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.deps.json
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.dll
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\bin\Debug\net6.0\AWAIT.DAL.pdb
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.csproj.AssemblyReference.cache
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.AssemblyInfoInputs.cache
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.AssemblyInfo.cs
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.csproj.CoreCompileInputs.cache
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.dll
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\refint\AWAIT.DAL.dll
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\AWAIT.DAL.pdb
+C:\Users\brand\source\repos\await_prototype\SeleniumRecorderApi\AWAIT.DAL\obj\Debug\net6.0\ref\AWAIT.DAL.dll

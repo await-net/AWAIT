@@ -14,9 +14,9 @@ namespace SeleniumRecorder.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly AwaitDbContext _context;
+        private readonly IWebHostEnvironment? _hostEnvironment;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
+        private readonly AwaitDbContext? _context;
 
         private Task<object>? executeScriptTask;
         private CancellationTokenSource? cancellationTokenSource;
@@ -222,10 +222,6 @@ namespace SeleniumRecorder.Controllers
             ViewBag.Console = "Started IDR Login Playback";
 
         }
-        public ActionResult InitRecorder()
-        {
-            return View();
-        }
         /// <summary>
         /// Responsible for Starting Recorder Script Files & Relevant Monitoring Systems
         /// </summary>
@@ -346,8 +342,9 @@ namespace SeleniumRecorder.Controllers
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
         }
-        /// <summary>
+        /// <summary>S
         /// Responsible for Disposing WebDriver & Preventing Memory Leaks
+        /// [!!NOT WORKING!!]
         /// </summary>
         [HttpPost]
         public IActionResult StopRecorder()
