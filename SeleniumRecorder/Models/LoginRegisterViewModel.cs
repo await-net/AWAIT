@@ -16,7 +16,7 @@
     }
     public class LoginRegisterViewModel
     {
-        public Login? login { get; set; }
-        public Register? register { get; set; }
+        public Login? LoginView { get; set; }
+        public Register? RegisterView { get; set; }
     }
 }

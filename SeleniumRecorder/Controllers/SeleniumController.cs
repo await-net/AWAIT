@@ -1,14 +1,6 @@
-﻿using AWAIT.DAL;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V111.Network;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using SeleniumRecorder.Models;
-using SeleniumRecorderApi.Models;
-using System.Dynamic;
 
 namespace SeleniumRecorder.Controllers
 {
@@ -67,7 +59,6 @@ namespace SeleniumRecorder.Controllers
             //return Content("Your Test has Passed");
             return View();
         }
-
         private List<IWebElement> GetElements(By by,IWebDriver driver,TimeSpan timeout)
         {
             try
@@ -78,7 +69,6 @@ namespace SeleniumRecorder.Controllers
             }
             catch (TimeoutException) { return null; }
         }
-
         private IWebElement GetElement(string target, IWebDriver driver, TimeSpan timeout)
         {
             try

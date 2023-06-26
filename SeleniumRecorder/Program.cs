@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // COOKIES
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddMvcCore().AddViews().AddCookieTempDataProvider();
 // SESSION
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
@@ -19,13 +20,12 @@ builder.Services.AddTransient<IWebDriver>(provider =>
     string webRootPath = provider.GetRequiredService<IWebHostEnvironment>().WebRootPath;
     string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");
 
-    ChromeOptions chromeOptions = new ChromeOptions();
+    ChromeOptions chromeOptions = new();
     return new ChromeDriver(chromeDriverPath, chromeOptions);
 });
-
+// RAZOR
 builder.Services.AddRazorPages();
-var app = builder.Build();;
-
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

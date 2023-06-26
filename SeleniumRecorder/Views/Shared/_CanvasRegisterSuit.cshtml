@@ -1,0 +1,40 @@
+﻿@model SuitTestView
+<div class="offcanvas offcanvas-start" tabindex="-1" id="createNewSuit" aria-labelledby="createNewSuitLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="createNewSuitLabel">Register Suit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <hr>
+        <div class="font-monospace">
+            <p><em>Please Select Suit Plan & Register Suit</em></p>
+        </div>
+        <form id="registerSuit">
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="input-group mb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="SuitRegisterView!.SuitName" class="form-control" id="floatingSuitName" placeholder="Name" required>
+                            <label for="SuitName">Suit Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group mb-3">
+                        <div class="form-floating">
+                            <select class="form-select" asp-for="SuitRegisterView!.SuitPlan" id="selectPlans" aria-label="selectPlansLabel" required>
+                                <option value="Basic" selected>Basic</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Enterprise">Enterprise</option>
+                            </select>
+                            <label for="SuitPlan">Select an available suit plan</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-outline-info">Register Suit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -45,7 +45,7 @@ namespace SeleniumRecorder.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("EventModel", (string)null);
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.EventPropertyTargetModel", b =>
@@ -73,11 +73,11 @@ namespace SeleniumRecorder.Migrations
 
             modelBuilder.Entity("AWAIT.DAL.SuitModel", b =>
                 {
-                    b.Property<int>("SuitId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SuitId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("SuitName")
                         .HasColumnType("nvarchar(max)");
@@ -85,9 +85,14 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("SuitPlan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SuitId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.ToTable("SuitModel", (string)null);
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Suits", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TargetModel", b =>
@@ -112,7 +117,7 @@ namespace SeleniumRecorder.Migrations
 
                     b.HasKey("TargetId");
 
-                    b.ToTable("TargetModel", (string)null);
+                    b.ToTable("Targets", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TargetTypeModel", b =>
@@ -129,26 +134,26 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("TargetTypeId");
 
                     b.HasIndex("TargetModelTargetId");
 
-                    b.ToTable("TargetTypeModel", (string)null);
+                    b.ToTable("TargetTypes", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TestModel", b =>
                 {
-                    b.Property<int>("TestId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("SuitId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TestDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestName")
                         .HasColumnType("nvarchar(max)");
@@ -162,11 +167,34 @@ namespace SeleniumRecorder.Migrations
                     b.Property<string>("TestWebDriver")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TestId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("SuitId");
+                    b.ToTable("Tests", (string)null);
+                });
 
-                    b.ToTable("TestModel", (string)null);
+            modelBuilder.Entity("AWAIT.DAL.UserModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.EventModel", b =>
@@ -201,6 +229,17 @@ namespace SeleniumRecorder.Migrations
                     b.Navigation("TargetModel");
                 });
 
+            modelBuilder.Entity("AWAIT.DAL.SuitModel", b =>
+                {
+                    b.HasOne("AWAIT.DAL.UserModel", "User")
+                        .WithMany("Suits")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AWAIT.DAL.TargetTypeModel", b =>
                 {
                     b.HasOne("AWAIT.DAL.TargetModel", null)
@@ -208,20 +247,14 @@ namespace SeleniumRecorder.Migrations
                         .HasForeignKey("TargetModelTargetId");
                 });
 
-            modelBuilder.Entity("AWAIT.DAL.TestModel", b =>
-                {
-                    b.HasOne("AWAIT.DAL.SuitModel", "Suit")
-                        .WithMany()
-                        .HasForeignKey("SuitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Suit");
-                });
-
             modelBuilder.Entity("AWAIT.DAL.TargetModel", b =>
                 {
                     b.Navigation("Targets");
+                });
+
+            modelBuilder.Entity("AWAIT.DAL.UserModel", b =>
+                {
+                    b.Navigation("Suits");
                 });
 #pragma warning restore 612, 618
         }

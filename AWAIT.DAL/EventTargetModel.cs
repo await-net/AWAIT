@@ -27,8 +27,7 @@ namespace AWAIT.DAL
     public class TargetTypeModel
     {
         [Key]
-        public int TargetTypeId { get; set; }
-        public string? Value { get; set; }
+        public int TargetTypeId { get; set; }        
         public string? Type { get; set; }
     }
 

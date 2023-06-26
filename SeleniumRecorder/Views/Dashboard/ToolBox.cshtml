@@ -1,5 +1,7 @@
-﻿@model TestSuitViewModel
+﻿@model SuitTestView
 @{
+   // [DASHBOARD]RAZOR-WEB-PAGE
+        // Designed & Built For AWAIT - Branden v Staden
     ViewData["Title"] = "ToolBox";
 }
 <style>
@@ -136,175 +138,11 @@
                     </div>
                     <!--RECORDING-TOOL-CONTENT-->
                     <div class="collapse" id="recorderTool">
-                        <div class="row p-2">
-                            <!--RECORDER-HEADING-->
-                            <div class="col-12 p-2">
-                                <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-center">
-                                    <p class="h5 p-2 text-center">Recording Tool Loaded!</p>
-                                </div>
-                            </div>
-                            <!--RECORDER-TAB-NAVIGATION-->
-                            <div class="col-12">
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item">
-                                        <a href="#0" class="nav-link active" data-bs-toggle="tab" data-bs-target="#record"
-                                           aria-controls="record" aria-selected="false">Setup</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#config"
-                                           aria-controls="config" aria-selected="false">Advanced Setup & Configuration</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <!--RECORDER-TAB-CONTENT-->
-                                <div class="tab-content p-2">
-                                    <div class="tab-pane fade show active" id="record">
-
-                                        <!--RECORDER-HEADING-->
-                                        <div class="text-body-secondary p-2">
-                                            <figure>
-                                                <blockquote class="blockquote">
-                                                </blockquote>
-                                                <figcaption class="blockquote-footer">
-                                                    <p class="lead h5">
-                                                        Setup Recorder<br>
-                                                        <small class="text-body-secondary font-monospace">
-                                                            Setup recorder & begin interacting with the targeted website or webpage.
-                                                        </small>
-                                                </figcaption>
-                                            </figure>
-                                            <form asp-action="CreateTest" method="post">
-                                                <div class="row g-2">
-                                                    <hr>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="input-group">
-                                                            <div class="form-floating">
-                                                                <select class="form-select" asp-for="Suit.SuitName" id="floatingSelect" aria-label="selectSuitLabel" required>
-                                                                    <option value="1">My Suit</option>
-                                                                    <option value="1">IDR Enterprise Suit</option>
-                                                                </select>
-                                                                <label for="SuitPlan">Select a Suit</label>
-                                                            </div>
-                                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createNewSuit" aria-controls="createNewSuit">Add</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="input-group">
-                                                            <div class="form-floating">
-                                                                <select class="form-select" asp-for="Suit.SuitPlan" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option selected>Default</option>
-                                                                    <option value="1">Inputs & Forms</option>
-                                                                    <option value="2">Media Players & Images</option>
-                                                                    <option value="3">Inclusive(Experimental)</option>
-                                                                </select>
-                                                                <label for="TestType">Select a Test Type</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-floating">
-                                                            <input type="text" asp-for="Test!.TestName" class="form-control" id="floatingPassword" placeholder="Password" required>
-                                                            <label for="TestName">Test Name</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-floating">
-                                                            <input type="text" asp-for="Test!.TestDescription" class="form-control" id="floatingPassword" placeholder="Password" required>
-                                                            <label for="TestDescription">Test Description</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-floating">
-                                                            <input type="text" asp-for="Test!.TestUrl" class="form-control" id="floatingPassword" placeholder="Password" required>
-                                                            <label for="TestUrl">Test URL</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="input-group mb-3">
-                                                            <div class="form-floating">
-                                                                <select class="form-select" asp-for="Test!.TestWebDriver" id="TestWebDriver" aria-label="TestWebDriver" required> 
-                                                                    <option selected>Chrome (114.0.5735.90)</option>
-                                                                </select>
-                                                                <label asp-for="Test!.TestWebDriver">Select a Test Type</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-2">
-                                                    <input type="submit" class="btn btn-outline-info" value="Save" />
-                                                </div>
-                                            </form>
-                                            <div class="col-6">
-                                                <p class="h4 p-2 text-secondary-emphasis d-flex flex-row align-items-center justify-content-start">
-                                                    Recorder Controls
-                                                </p>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="input-group">
-                                                    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
-                                                        <button type="button" class="btn btn-outline-success" id="startWebDriver">
-                                                            Start
-                                                        </button>
-                                                        <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
-                                                        <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                    </div>
-                                    <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
-                                    <div class="tab-content p-2">
-                                        <div class="tab-pane fade show" id="config">
-                                            <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
-                                        </div>
-                                        <hr>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @await Html.PartialAsync("_Recorder")
                     </div>
                 </div>
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="createNewSuit" aria-labelledby="createNewSuitLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="createNewSuitLabel">Register Suit</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <hr>
-                        <div class="font-monospace">
-                            <p><em>Please Select Suit Plan & Register Suit</em></p>
-                        </div>
-                        <form asp-action="CreateTest" method="post">
-                            <div class="row g-2">
-                                <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="form-floating">
-                                            <input type="password" asp-for="Suit!.SuitName" class="form-control" id="floatingSuitName" placeholder="Name" required>
-                                            <label for="SuitName">Suit Name</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="form-floating">
-                                            <select class="form-select" asp-for="Suit!.SuitPlan" id="selectPlans" aria-label="selectPlansLabel" required>
-                                                <option value="1">Basic</option>
-                                                <option value="2">Premium</option>
-                                                <option value="3">Enterprise</option>
-                                            </select>
-                                            <label for="SuitPlan">Select an available suit plan</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-outline-info">Register Suit</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <!--SUIT-REGISTER-->
+                @await Html.PartialAsync("_CanvasRegisterSuit")
                 <!--PLAYBACK-TOOL-->
                 <div class="col-12 p-2">
                     <!--PLAYBACK-TOOL-CARD-->
@@ -336,9 +174,6 @@
                         <div class="row p-2">
                             <!--PLAYBACK-HEADING-->
                             <div class="text-body-secondary">
-                                <p class="h5 p-2">
-                                    Suit Playbacks
-                                </p>
                                 <figure>
                                     <blockquote class="blockquote">
                                     </blockquote>
@@ -358,80 +193,64 @@
                                 </figure>
                             </div>
                             <!--PLAYBACK-BODY-->
-                            <div class="list-group list-group-flush">
-                                <a data-bs-toggle="collapse" href="#defaultsuitplayback" role="button"
-                                   aria-expanded="false" aria-controls="defaultsuitplayback"
-                                   class="list-group-item list-group-item-action">
-                                    <span class="lead font-monospace">IDR Login Playback </span><span class="navbar-toggler-icon"></span>
-                                </a>
-                                <div class="collapse multi-collapse p-1" id="defaultsuitplayback">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button" id="idrLoginPlay" 
-                                                    class="btn btn-outline-primary button-click-animation align-items-center justify-content-start"
-                                                    onclick="@Url.Action("Playback","Dashboard")">
-                                                    <small>PLAY</small> <i class="bi bi-play-btn"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
-                                                    <small>VIEW</small> <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex p-2 align-items-center justify-content-center">
-                                                <button type="button"
-                                                        class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
-                                                    <small>REMOVE</small> <i class="bi bi-trash"></i>
-                                                </button>
+                            <div class="list-group list-group-flush">    
+                                    <a data-bs-toggle="collapse" href="#" role="button"
+                                       aria-expanded="false" aria-controls="#"
+                                       class="list-group-item list-group-item-action">
+                                        <span class="lead font-monospace"> </span><span class="navbar-toggler-icon"></span>
+                                    </a>
+                                    <div class="collapse multi-collapse p-1" id="#">
+                                        <div class="row">
+                                            <div class="col d-flex align-items-center justify-content-center">
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button" id="play"
+                                                            class="btn btn-outline-primary button-click-animation align-items-center justify-content-start"
+                                                            onclick="@Url.Action("Playback", "Dashboard", new { testName = "#" })">
+                                                        <small>PLAY</small> <i class="bi bi-play-btn"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button"
+                                                            class="btn btn-outline-info button-click-animation align-items-center justify-content-start">
+                                                        <small>VIEW</small> <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="d-flex p-2 align-items-center justify-content-center">
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger button-click-animation align-items-center justify-content-start">
+                                                        <small>REMOVE</small> <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div> 
                             </div>
                         </div>
                         <hr>
                     </div>
                 </div>
             </div>
-            <div class="col p-3 mb-2 bg-black text-white">
-                <!--CONSOLE-CARD-->
-                <div class="row">
-                    <!--RECORDER-HEADING-->
-                    <div class="col-12 p-2">
-                        <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-center">
-                            <p class="h5 p-2 text-center">CONSOLE OUTPUT</p>
-                        </div>
-                    </div>
-                    <!--RECORDER-TAB-NAVIGATION-->
-                    <div class="col-12 bg-black">
-                        <div class="console-output"></div>
-                        <span class="console-cursor"></span>
-                    </div>
-                </div>
-            </div>
+            <!--CONSOLE-->
+            @await Html.PartialAsync("_Console")
         </div>
     </div>
 </div>
-<button type="button" class="btn btn-primary" id="playbackNotify">Show live toast</button>
-
+<!--TOAST-->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header" id="toastHeader">            
-            <strong class="me-auto"><i class="bi bi-play-circle"></i> Playback Tool</strong>
+        <div class="toast-header" id="toastHeader">
+            <strong class="me-auto"><i class="bi bi-play-circle"></i> ToolBox</strong>
             <small>Just now</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            IDR Login Playback has started...
+            TEXT BODY
         </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-   
-</script>
+
 @section Scripts {
     <script src="~/js/tool.js" asp-append-version="true"></script>
     <script src="~/js/console.js" asp-append-version="true"></script>
