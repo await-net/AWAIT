@@ -1,0 +1,248 @@
+﻿@model SuitTestView
+<div class="row p-2">
+    <!--RECORDER-HEADING-->
+    <div class="col-12 p-2">
+        <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-left">
+            <form id="selectRecorder">
+                <div class="mb-3">
+                    <label for="recoders" class="form-label">Selected Recorder</label>
+                    <div class="input-group mb-3">
+                        <select class="form-select" aria-label="selectRecorder">
+                            <option selected>Select Recorder</option>
+                            @foreach (var recorder in Model.TestView!)
+                            {
+                                <option value="@recorder.TestUrl">@recorder.TestName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Recorder Controls:</label>
+                    <div class="input-group mb-3">
+                        <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                            <button type="button" class="btn btn-outline-success" id="startWebDriver" disabled>
+                                Start
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" id="stopWebDriver" disabled>Stop</button>
+                            <button type="button" class="btn btn-outline-info" id="saveWebDriver" disabled>Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--RECORDER-TAB-NAVIGATION-->
+    <div class="col-12">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#0" class="nav-link active" data-bs-toggle="tab" data-bs-target="#record"
+                   aria-controls="record" aria-selected="false">Setup New Recorder</a>
+            </li>
+            <li class="nav-item">
+                <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#recorderManage"
+                   aria-controls="config" aria-selected="false">Manage Recorders</a>
+            </li>
+            <li class="nav-item">
+                <a href="#0" class="nav-link" data-bs-toggle="tab" data-bs-target="#config"
+                   aria-controls="config" aria-selected="false">Advanced</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col">
+        <!--RECORDER-TAB-CONTENT-->
+        <div class="tab-content p-2">
+            <div class="tab-pane fade show active" id="record">
+                <!--NEW-RECORDER-HEADING-->
+                <div class="text-body-secondary p-2">
+                    <figure>
+                        <blockquote class="blockquote">
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <p class="lead h5">
+                                Setup New Recorder<br>
+                                <small class="text-body-secondary font-monospace">
+                                    Setup recorder & begin interacting with the targeted Website/Web-Application to generate your automated test.
+                                </small>
+                        </figcaption>
+                    </figure>
+                    <form id="createTest">
+                        <div class="row g-2">
+                            <hr>
+                            <div class="col-md-6 col-12">
+                                <div class="input-group">
+                                    <div class="form-floating">
+                                        <select class="form-select" asp-for="TestCreateView!.SuitName" id="suitNameSelect" aria-label="selectSuitLabel" required>
+                                            @foreach (var suit in Model.SuitView!)
+                                            {
+                                                <option value="@suit.SuitName">@suit.SuitName | @suit.SuitPlan</option>
+                                            }
+                                        </select>
+                                        <label>Selected Testing Suit</label>
+                                    </div>
+                                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createNewSuit" aria-controls="createNewSuit">Register Suit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="input-group">
+                                    <div class="form-floating">
+                                        <select class="form-select" asp-for="TestCreateView!.TestType" id="floatingSelect" aria-label="Floating label select example" required>
+                                            <option value="Default" selected>(Default) Generic Type</option>
+                                            <option value="InputsForms">Inputs & Forms</option>
+                                            <option value="MediaImages">Media Players & Images</option>
+                                        </select>
+                                        <label asp-for="TestCreateView!.TestType">Select a Test Type</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="TestCreateView!.TestName" class="form-control" id="floatingPassword" placeholder="Password" required>
+                                    <label asp-for="TestCreateView!.TestName">Test Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="TestCreateView!.TestDescription" class="form-control" id="floatingPassword" placeholder="Password" required>
+                                    <label asp-for="TestCreateView!.TestDescription">Test Description</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="TestCreateView!.TestUrl" class="form-control" id="floatingPassword" placeholder="Password" required>
+                                    <label asp-for="TestCreateView!.TestUrl">Test URL</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="input-group mb-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" asp-for="TestCreateView!.TestWebDriver" id="TestWebDriver" aria-label="TestWebDriver" required>
+                                            <option selected>Chrome (114.0.5735.90)</option>
+                                        </select>
+                                        <label asp-for="TestCreateView!.TestWebDriver">Select Preferred WebDriver</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2">
+                            <input type="submit" class="btn btn-outline-info" value="Create" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--MANAGE-RECORDER-TAB-CONTENT-->
+            <div class="tab-pane fade show" id="recorderManage">
+                <!--RECORDER-MANAGE-HEADING-->
+                <div class="text-body-secondary p-2">
+                    <figure>
+                        <blockquote class="blockquote">
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <p class="lead h5">
+                                Manage Recorders<br>
+                                <small class="text-body-secondary font-monospace">
+                                    Change equipped recorder, remove a recorder, update a recorder details and switch suits.
+                                </small>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="row g-2">
+                    <div class="list-group">
+                        @if (Model.TestView.Where(s => s.SuitId == 0).Select(s => s.SuitName!.Equals("Demo Test")).Count() > 0)
+                        {
+                            <div class="text-body-secondary p-2">
+                                <p><i class="bi bi-asterisk"></i> NO RECORDERS FOUND!</p>
+                                <p>Please Setup New Recorder.</p>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var recorder in Model.TestView!)
+                            {
+                                <div id="recorder-@recorder.TestId">
+                                    <hr>
+                                    <a class="list-group-item list-group-item-action disabled">
+                                        <b>@recorder.TestName</b>
+                                    </a>
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+                                            <a title="Equip Recorder" class="btn btn-outline-success">
+                                                EQUIP
+                                            </a>
+                                            <a title="View Recorder Details" class="btn btn-outline-info" aria-current="false" data-bs-toggle="collapse"
+                                               data-bs-target="#@recorder.TestId" aria-expanded="false" aria-controls="@recorder.TestId">
+                                                VIEW
+                                            </a>
+                                            <a title="Delete Recorder" class="btn btn-outline-danger" onclick="deleteRecorder(@recorder.TestId)">
+                                                <i class="bi bi-trash3"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="collapse collapse-horizontal" id="@recorder.TestId">
+                                        <div class="card p-2">
+                                            <div class="card card-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label for="Suit" class="form-label">Suit</label>
+                                                        <div class="input-group mb-3">
+                                                            <select class="form-select" aria-label="Suit" disabled>
+                                                                <option selected>@recorder.SuitName</option>
+                                                                <option value="1">Can not change in current suit!</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="Driver" class="form-label">Web Driver</label>
+                                                        <div class="input-group mb-3">
+                                                            <select class="form-select" aria-label="WebDriver" disabled>
+                                                                <option selected>@recorder.TestWebDriver</option>
+                                                                <option value="1">Not available in current suit!</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="TestName" class="form-label">Test Name</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" placeholder="Recorder Name"
+                                                                   aria-describedby="recorder name property" value="@recorder.TestName" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="TestType" class="form-label">Recorder Type</label>
+                                                        <div class="input-group mb-3">
+                                                            <select class="form-select" aria-label="Web Type" disabled>
+                                                                <option selected>@recorder.TestType</option>
+                                                                <option value="1">Can not change in current suit!</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="TestDescription" class="form-label">Description</label>
+                                                        <div class="input-group">
+                                                            <textarea class="form-control" aria-label="recorder description property" disabled>@recorder.TestDescription</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="TestUrl" class="form-label">Recorder Start URL</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" placeholder="Recorder Start URL"
+                                                                   aria-describedby="recorder start property" value="@recorder.TestUrl" disabled>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <!--CONFIGURATION-TAB-CONTENT(NOT IMPLEMENTED)-->
+            <div class="tab-pane fade show" id="config">
+                <h5>Not Implemented... <span><i class="bi bi-cone-striped"></i></span></h5>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>

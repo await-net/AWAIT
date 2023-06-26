@@ -72,6 +72,27 @@ window.addEventListener('load', () => {
         }
     });
 });
+// DELETE RECORDER
+function deleteRecorder(recorderId) {
+    // Send an AJAX request to the RecorderDelete action
+    $.ajax({
+        url: "/Dashboard/RecorderDelete",
+        type: "GET",
+        data: { recorderId: recorderId },
+        success: function () {
+            // Remove the recorder from the view
+            $("#recorder-" + recorderId).remove();
+
+            // Show the toast notification
+            var toastElement = document.getElementById("notification");
+            var toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        },
+        error: function (xhr, status, error) {
+            console.log("Error: " + error);
+        }
+    });
+}
 // RECORDER - START, STOP & SAVE
 $(document).ready(function () {
     const toastBody = document.querySelector('.toast-body');
@@ -146,15 +167,15 @@ $(document).ready(function () {
             method: "POST",
             success: function (response) {
                 console.log(response);
-                // Update Start Button so that it is no longer disabled
-                startWebDriver.disabled = false;
-                // Disable Save Button
-                this.disabled = true;
             },
             error: function (xhr, status, error) {
                 console.error(error, status, xhr);
             }
         });
+        // Update Start Button so that it is no longer disabled
+        startWebDriver.disabled = false;
+        // Disable Save Button
+        this.disabled = true;
     });
 });
 // PLAYBACK - START
@@ -347,3 +368,4 @@ $(document).ready(function () {
     });
 
 });
+// BY: Branden v Staden

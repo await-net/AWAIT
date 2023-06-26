@@ -1,7 +1,6 @@
 ﻿using AWAIT.DAL;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -9,31 +8,55 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Models;
 using System.Diagnostics;
-
+/// BUILT FOR AWAIT - Branden v Staden
+/// ->PROTOTYPE VERSION 1: 26/06/23<-
 namespace SeleniumRecorder.Controllers
 {
+    /// <summary>
+    /// ALL FRONTEND SERVERSIDE (C#)CODE IMPLEMENTED IN DASHBOARD CONTROLLER
+    /// </summary>
     public class DashboardController : Controller
     {
+        /// <summary>
+        /// NULLABLE OBJECTS
+        /// </summary>
+        private Task<object>? executeScriptTask;
+        private CancellationTokenSource? cancellationTokenSource;
+        public ThreadLocal<IWebDriver>? DriverThread;
+        public IWebDriver? _webDriver;
+        public int _processId = -1;
+        /// <summary>
+        /// CONSTRUCTOR OBJECTS
+        /// </summary>
         private readonly IWebHostEnvironment? _hostEnvironment;
         private readonly IHttpContextAccessor? _httpContextAccessor;
         private readonly AwaitDbContext? _context;
+        /// <summary>
+        /// CONSTRUCTING...
+        /// </summary>
+        /// <param name="hostEnvironment"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="context"></param>
 
-        private Task<object>? executeScriptTask;
-        private CancellationTokenSource? cancellationTokenSource;
-        public ThreadLocal<IWebDriver> DriverThread;
-        public IWebDriver? _webDriver;
-        public int _processId = -1;
-        public DashboardController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor, AwaitDbContext context)
+        public DashboardController(IWebHostEnvironment? hostEnvironment, IHttpContextAccessor? httpContextAccessor, AwaitDbContext? context)
         {
             _hostEnvironment = hostEnvironment;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
-
+        /// <summary>
+        /// Responsible for Returning View()[**Dashboard**][Index]
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
+        /// <summary>
+        /// Responsible for Returning View(model)[ToolBox]
+        /// </summary>
+        /// <param name="model">SuitTestView</param>
+        /// <returns>ToolBox.cshtml</returns>
         public IActionResult ToolBox(SuitTestView model)
         {
             var viewModel = new SuitTestView();
@@ -51,11 +74,11 @@ namespace SeleniumRecorder.Controllers
                 viewModel.ConsoleView = consoleDefault;
             }
 
-            var user = _context.Users.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
+            var user = _context!.Users!.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
 
             try
             {
-                var suits = _context.Suits.Where(s => s.UserId == user!.Id).Select(s => new SuitView
+                var suits = _context.Suits!.Where(s => s.UserId == user!.Id).Select(s => new SuitView
                 {
                     SuitName = s.SuitName,
                     SuitPlan = s.SuitPlan
@@ -86,9 +109,9 @@ namespace SeleniumRecorder.Controllers
             // Get tests and populate view model
             try
             {
-                var suitIds = _context.Suits.Where(s => s.UserId == user!.Id).Select(s => s.Id).ToList();
+                var suitIds = _context.Suits!.Where(s => s.UserId == user!.Id).Select(s => s.Id).ToList();
 
-                var tests = _context.Tests
+                var tests = _context.Tests!
                     .Where(s => suitIds.Contains(s.SuitId))
                     .Select(s => new TestView
                     {
@@ -99,10 +122,9 @@ namespace SeleniumRecorder.Controllers
                         TestDescription = s.TestDescription,
                         TestUrl = s.TestUrl,
                         SuitId = s.SuitId,
-                        SuitName = "Demo Testæ"
+                        SuitName = "Demo Test"
                     })
                     .ToList();
-
 
                 if (tests.Count() > 0)
                 {
@@ -132,15 +154,25 @@ namespace SeleniumRecorder.Controllers
 
             return View(viewModel);
         }
+        /// <summary>
+        /// Responsible for Returning View()[Settings]
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Settings()
         {
-            return View();
+            // Not Implemented
+            return View(); // DOES NOT EXISIT YET!
         }
+        /// <summary>
+        /// Responsible for Generating New Suit Model: Saves to Db
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> RegisterSuit(SuitTestView model)
         {
-            var user = _context.Users.FirstOrDefault(s => s.UserName == "JohnDoe");
-            var suits = _context.Suits.Where(s => s.UserId == user!.Id).ToList();
+            var user = _context!.Users!.FirstOrDefault(s => s.UserName == "JohnDoe");
+            var suits = _context.Suits!.Where(s => s.UserId == user!.Id).ToList();
             var registerSuit = new SuitModel
             {
                 SuitName = model.SuitRegisterView?.SuitName,
@@ -157,7 +189,7 @@ namespace SeleniumRecorder.Controllers
                 }
             }
 
-            _context.Suits.Add(registerSuit);
+            _context.Suits!.Add(registerSuit);
             await _context.SaveChangesAsync();
 
             // Used to update view
@@ -169,6 +201,11 @@ namespace SeleniumRecorder.Controllers
 
             return Json(new { suit = registeredSuit });
         }
+        /// <summary>
+        /// Responsible for Generating New Test Model: Saves to Db
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateTest(SuitTestView model)
         {
@@ -189,7 +226,7 @@ namespace SeleniumRecorder.Controllers
             }
 
             // Suit Name Db Lookup => SuitId
-            var selectedSuit = _context.Suits.Where(s => s.SuitName == suitName).FirstOrDefault();
+            var selectedSuit = _context!.Suits!.Where(s => s.SuitName == suitName).FirstOrDefault();
 
             var createTest = new TestModel
             {
@@ -202,7 +239,7 @@ namespace SeleniumRecorder.Controllers
                 
             };
 
-            _context.Tests.Add(createTest);
+            _context.Tests!.Add(createTest);
             await _context.SaveChangesAsync();
 
             // Update Console Recorder: Saving Test
@@ -213,13 +250,14 @@ namespace SeleniumRecorder.Controllers
             };
             return Json(new { test = consoleModel });
         }
+        /// <summary>
+        /// Responsible for Playback Functionalities (SeleiumnConstroller)-PASS: DashboardController
+        /// </summary>
+        /// <param name="testName"></param>
         [HttpGet]
-        public async Task Playback(string? testName)
+        public void Playback(string? testName)
         {
-            Console.WriteLine("PLAYBACK!");
-            SeleniumController selenium = new();
-            selenium.Index(1);
-            ViewBag.Console = "Started IDR Login Playback";
+            // Not Implemented
 
         }
         /// <summary>
@@ -232,7 +270,7 @@ namespace SeleniumRecorder.Controllers
         [HttpGet]
         public async Task Recorder(string? url)
         {
-            string webRootPath = _hostEnvironment.WebRootPath;
+            string webRootPath = _hostEnvironment!.WebRootPath;
             string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");
 
             string recordDocumentScriptPATH = Path.Combine(webRootPath, "js", "recorderVersion1.js");
@@ -252,8 +290,17 @@ namespace SeleniumRecorder.Controllers
             // Get the Process ID
             var pid = cService.ProcessId;
             const string cookieName = "web-driver-pid";
-            var requestCookies = _httpContextAccessor.HttpContext!.Request.Cookies;
-            var intialRequest = requestCookies[cookieName];
+            var requestCookies = _httpContextAccessor!.HttpContext!.Request.Cookies;
+            string? initialRequest = requestCookies[cookieName];
+            if(!String.IsNullOrEmpty(initialRequest))
+            {
+                Console.WriteLine($"COOKIE DETECTED: {initialRequest}");
+            }
+            else
+            {
+                Console.WriteLine($"{initialRequest} - NULL COOKIE REFERENCE");
+
+            }
             // Create/Update Cookie WebDriver PID
             var cookieOptions = new CookieOptions
             {
@@ -294,7 +341,7 @@ namespace SeleniumRecorder.Controllers
             }
             await monitorUrlTask;
             cancellationTokenSource.Cancel();
-        }       
+        }
         /// <summary>
         /// Responsible for Capturing Events & Saving back to database
         /// </summary>
@@ -302,10 +349,23 @@ namespace SeleniumRecorder.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
-        public async Task Recorder([FromBody] dynamic eventResult)
+        public void Recorder([FromBody] dynamic eventResult)
         {
             var webJSON = JsonConvert.DeserializeObject<JSONModel>(eventResult.ToString());
             Console.WriteLine($"{webJSON}");
+        }
+        /// <summary>
+        /// Responsible for Deleting Recorder Models
+        /// </summary>
+        /// <param name="recorderId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult RecorderDelete(int recorderId)
+        {
+            var recorder = _context!.Tests!.Where(s => s.Id == recorderId).FirstOrDefault();
+            _context.Tests!.Remove(recorder!);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(ToolBox));
         }
         /// <summary>
         /// Responsible for Monitoring URL Changes
@@ -315,7 +375,7 @@ namespace SeleniumRecorder.Controllers
         /// <returns></returns>
         private async Task MonitorUrlChanges(string initialUrl, CancellationToken cancellationToken)
         {
-            string webRootPath = _hostEnvironment.WebRootPath;
+            string webRootPath = _hostEnvironment!.WebRootPath;
             string chromeDriverPath = Path.Combine(webRootPath, "chromeDriver");
 
             string recordDocumentScriptPATH = Path.Combine(webRootPath, "js", "recorderVersion1.js");
@@ -350,12 +410,13 @@ namespace SeleniumRecorder.Controllers
         public IActionResult StopRecorder()
         {
             const string cookieName = "web-driver-pid";
-            var requestCookies = _httpContextAccessor.HttpContext!.Request.Cookies;
-            var intialRequest = requestCookies[cookieName];
-            if (intialRequest != null)
+            var requestCookies = _httpContextAccessor!.HttpContext!.Request.Cookies;
+            string? initialRequest = requestCookies[cookieName];
+            if (!String.IsNullOrEmpty(initialRequest))
             {
+                Console.WriteLine($"INITIAL COOKIE DETECTED: {initialRequest}");
                 // Parse the PID from the cookie value
-                int pid = int.Parse(intialRequest!);
+                int pid = int.Parse(initialRequest!);
 
                 // Get the process using the stored PID
                 Process process = Process.GetProcessById(pid);
@@ -366,7 +427,7 @@ namespace SeleniumRecorder.Controllers
             }
             else
             {
-                Console.WriteLine("Cookie Not Found!");
+                Console.WriteLine($"{initialRequest} - NULL COOKIE REFERENCE");
             }
             return BadRequest();
         }
