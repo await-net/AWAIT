@@ -1,5 +1,9 @@
 ﻿@model SuitRecorderView
 <div class="row p-2">
+    @if(Model.Recorders!.Count > 0)
+    {
+        
+    }
     <!--RECORDER-HEADING-->
     <div class="col-12 p-2">
         <div class="border-top border-bottom border-dark d-flex align-items-center justify-content-left">
@@ -18,7 +22,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Recorder Controls:</label>
+                    <label class="form-label">New Test Scenario:</label>
                     <div class="input-group mb-3">
                         <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
                             <button type="button" class="btn btn-outline-success" id="startWebDriver" disabled>
