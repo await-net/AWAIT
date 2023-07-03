@@ -11,9 +11,9 @@ namespace SeleniumRecorder.DAL
         public DbSet<EventPropertyTargetModel>? EPTs { get; set; }
         // [TEST SUIT TABLES]
         public DbSet<SuitModel>? Suits { get; set; }
-        public DbSet<TestModel>? Tests { get; set; }
+        public DbSet<RecorderModel>? Recorders { get; set; }
         // [EVENT TARGET TABLES]
-        public DbSet<EventModel>? Events { get; set; }
+        public DbSet<TestEventModel>? Events { get; set; }
         public DbSet<TargetModel>? Targets { get; set; }
         public DbSet<TargetTypeModel>? TargetTypes { get; set; }
         // [USERS TABLE]
@@ -25,10 +25,10 @@ namespace SeleniumRecorder.DAL
             modelBuilder.Entity<EventPropertyTargetModel>().ToTable("EPTs");
             // OVERRIDE: SuitModel =>[Suits]
             modelBuilder.Entity<SuitModel>().ToTable("Suits");
-            // OVERRIDE: TestModel =>[Tests]
-            modelBuilder.Entity<TestModel>().ToTable("Tests");
-            // OVERRIDE: EventModel =>[Events]
-            modelBuilder.Entity<EventModel>().ToTable("Events");
+            // OVERRIDE: RecorderModel =>[Recorders]
+            modelBuilder.Entity<RecorderModel>().ToTable("Recorders");
+            // OVERRIDE: TestEventModel =>[Events]
+            modelBuilder.Entity<TestEventModel>().ToTable("TestEvents");
             // OVERRIDE: TargetModel =>[Targets]
             modelBuilder.Entity<TargetModel>().ToTable("Targets");
             // OVERRIDE: TargetTypeModel =>[TargetTypes]

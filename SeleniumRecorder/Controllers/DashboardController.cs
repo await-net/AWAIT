@@ -7,9 +7,14 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumRecorder.DAL;
 using SeleniumRecorder.Models;
+using SeleniumRecorder.Services;
 using System.Diagnostics;
-/// BUILT FOR AWAIT - Branden v Staden
-/// ->PROTOTYPE VERSION 1: 26/06/23<-
+/// ============================================
+/// [AWAIT]: 'Automated Web-Application Integrated Testing'
+/// [CURRENT BUILD]: 'Prototype Version 1.0'
+/// [By]: 'Branden van Staden' & 'Troy Martin'
+/// [Release Date]: '03 July 2023'
+/// ============================================
 namespace SeleniumRecorder.Controllers
 {
     /// <summary>
@@ -55,103 +60,46 @@ namespace SeleniumRecorder.Controllers
         /// <summary>
         /// Responsible for Returning View(model)[ToolBox]
         /// </summary>
-        /// <param name="model">SuitTestView</param>
+        /// <param name="model">SuitRecorderView</param>
         /// <returns>ToolBox.cshtml</returns>
-        public IActionResult ToolBox(SuitTestView model)
+        public IActionResult ToolBox(SuitRecorderView model)
         {
-            var viewModel = new SuitTestView();
-            if (model.ConsoleView != null)
-            {
-                viewModel.ConsoleView = model.ConsoleView;
-            }
-            else
-            {
-                var consoleDefault = new ConsoleViewModel
-                {
-                    Action = "Reach Potential With Your AWAIT TOOLBOX",
-                    Value = "Try Creating a New Test by Registering a Suit and Creating a New Test!\nUse Recorder Controls To Start Testing..."
-                };
-                viewModel.ConsoleView = consoleDefault;
-            }
-
+            var viewModel = new SuitRecorderView();
+            //  
             var user = _context!.Users!.Where(s => s.UserName!.Equals("JohnDoe")).FirstOrDefault();
-
-            try
-            {
-                var suits = _context.Suits!.Where(s => s.UserId == user!.Id).Select(s => new SuitView
+            //
+            var suitIds = _context.Suits!.Where(s => s.UserId == user!.Id).Select(s => s.Id).ToList();
+            //
+            var recorders = _context.Recorders!
+                .Where(s => suitIds.Contains(s.SuitId))
+                .Select(s => new RecorderView
+                {
+                    RecorderId = s.Id,
+                    RecorderWebDriver = s.RecorderWebDriver,
+                    RecorderName = s.RecorderName,
+                    RecorderDescription = s.RecorderDescription,
+                    SuitId = s.SuitId,
+                    SuitName = "Demo Test"
+                }).ToList();
+            //
+            var suits = _context.Suits!
+                .Where(s => s.UserId == user!.Id)
+                .Select(s => new SuitView
                 {
                     SuitName = s.SuitName,
                     SuitPlan = s.SuitPlan
                 }).ToList();
-
-                if (suits.Count() > 0)
-                {
-                    viewModel.SuitView = suits;
-                }
-                else
-                {
-                    var defaultSuit = new List<SuitView>
-                {
-                    new SuitView
-                    {
-                        SuitName = "Please Register Suit",
-                        SuitPlan = ""
-                    }
-                };
-                    viewModel.SuitView = defaultSuit;
-                }
-            }
-            catch (Exception ex)
+            //
+            if (suits.Count() > 0)
             {
-                Console.Write(ex.ToString());
+                viewModel.SuitView = suits;
             }
-
-            // Get tests and populate view model
-            try
+            //
+            if (recorders.Count() > 0)
             {
-                var suitIds = _context.Suits!.Where(s => s.UserId == user!.Id).Select(s => s.Id).ToList();
-
-                var tests = _context.Tests!
-                    .Where(s => suitIds.Contains(s.SuitId))
-                    .Select(s => new TestView
-                    {
-                        TestId = s.Id,
-                        TestWebDriver = s.TestWebDriver,
-                        TestName = s.TestName,
-                        TestType = s.TestType,
-                        TestDescription = s.TestDescription,
-                        TestUrl = s.TestUrl,
-                        SuitId = s.SuitId,
-                        SuitName = "Demo Test"
-                    })
-                    .ToList();
-
-                if (tests.Count() > 0)
-                {
-                    viewModel.TestView = tests;
-                }
-                else
-                {
-                    var defaultTest = new List<TestView>
-                    {
-                        new TestView
-                        {
-                            TestWebDriver = "",
-                            TestName = "No Tests Created Yet!",
-                            TestDescription = "Select/Register Suit and Create New Recorder...",
-                            TestUrl = "www.example.com",
-                            SuitId = 0,
-                            SuitName = ""
-                        }
-                    };
-                    viewModel.TestView = defaultTest;
-                }
+                viewModel.Recorders = recorders;
             }
-            catch (Exception ex)
-            {
-                Console.Write(ex.ToString());
-            }
-
+            //
             return View(viewModel);
         }
         /// <summary>
@@ -169,7 +117,7 @@ namespace SeleniumRecorder.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> RegisterSuit(SuitTestView model)
+        public async Task<IActionResult> RegisterSuit(SuitRecorderView model)
         {
             var user = _context!.Users!.FirstOrDefault(s => s.UserName == "JohnDoe");
             var suits = _context.Suits!.Where(s => s.UserId == user!.Id).ToList();
@@ -198,67 +146,42 @@ namespace SeleniumRecorder.Controllers
                 SuitName = model.SuitRegisterView?.SuitName,
                 SuitPlan = model.SuitRegisterView?.SuitPlan
             };
-
             return Json(new { suit = registeredSuit });
         }
         /// <summary>
-        /// Responsible for Generating New Test Model: Saves to Db
+        /// Controller Method: Service & populate console window
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateTest(SuitTestView model)
+        public async Task<IActionResult> CreateRecorder(SuitRecorderView model)
         {
+            // Implements Web Service
+            WebService webService = new(_context!);
+            var newRecorder = await webService.ServiceCreateRecorder(model);
             // Update Console Recorder: Saving Test
-            var consoleModel = new ConsoleViewModel
+            _ = new ConsoleViewModel
             {
                 Action = "save",
-                Value = "Saving Test Model..."
-            };            
-
-            string testUrl = model.TestCreateView!.TestUrl!;
-            string suitName = model.TestCreateView.SuitName!;
-
-            // Compile Valid URL for Driver:
-            if (!testUrl.StartsWith("https://"))
-            {
-                testUrl = testUrl!.Insert(0, "https://");
-            }
-
-            // Suit Name Db Lookup => SuitId
-            var selectedSuit = _context!.Suits!.Where(s => s.SuitName == suitName).FirstOrDefault();
-
-            var createTest = new TestModel
-            {
-                TestWebDriver = model.TestCreateView!.TestWebDriver,
-                TestName = model.TestCreateView.TestName,
-                TestType = model.TestCreateView.TestType,
-                TestUrl = testUrl,
-                TestDescription = model.TestCreateView.TestDescription,
-                SuitId = selectedSuit!.Id
-                
+                Value = "Creating a NEW Recorder"
             };
-
-            _context.Tests!.Add(createTest);
-            await _context.SaveChangesAsync();
-
             // Update Console Recorder: Saving Test
-            consoleModel = new ConsoleViewModel
+            ConsoleViewModel? consoleModel = new()
             {
-                Action = $"Successfully Created Test({createTest.TestType}): '{createTest.TestName}'",
-                Value = $"Click Start to Navigate to: {createTest.TestUrl}"
+                Action = $"Successfully NEW Recorder: '{newRecorder.RecorderName}'",
+                Value = $"Next: Create Your First Automated Test!"
             };
+            // Return a JSON string - Used in front-end: populate & update console view
             return Json(new { test = consoleModel });
         }
         /// <summary>
-        /// Responsible for Playback Functionalities (SeleiumnConstroller)-PASS: DashboardController
+        /// Responsible for Playback Functionalities (SeleiumnController)-PASS: DashboardController
         /// </summary>
         /// <param name="testName"></param>
         [HttpGet]
         public void Playback(string? testName)
         {
             // Not Implemented
-
         }
         /// <summary>
         /// Responsible for Starting Recorder Script Files & Relevant Monitoring Systems
@@ -362,8 +285,8 @@ namespace SeleniumRecorder.Controllers
         [HttpGet]
         public ActionResult RecorderDelete(int recorderId)
         {
-            var recorder = _context!.Tests!.Where(s => s.Id == recorderId).FirstOrDefault();
-            _context.Tests!.Remove(recorder!);
+            var recorder = _context!.Recorders!.Where(s => s.Id == recorderId).FirstOrDefault();
+            _context.Recorders!.Remove(recorder!);
             _context.SaveChanges();
             return RedirectToAction(nameof(ToolBox));
         }

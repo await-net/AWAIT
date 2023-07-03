@@ -23,7 +23,7 @@ function eventHandler(event) {
         },
         value: ""
     };
-
+    // switch 
     // Allow the captured event to continue its normal execution
     setTimeout(function() {
         var dispatchedEvent = new Event(event.type, { bubbles: true, cancelable: true });

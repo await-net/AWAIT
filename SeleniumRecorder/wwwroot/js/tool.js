@@ -314,7 +314,7 @@ $(document).ready(function () {
         var formData = $(this).serialize();
 
         $.ajax({
-            url: "/Dashboard/CreateTest",
+            url: "/Dashboard/CreateRecorder",
             type: "POST",
             data: formData,
             success: function (result) {

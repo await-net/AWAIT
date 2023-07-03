@@ -10,7 +10,7 @@ namespace SeleniumRecorder.Controllers
         public IActionResult Index(int id)
         {
             //var seleniumTest = JsonConvert.DeserializeObject<EventTargetModel>(System.IO.File.ReadAllText("IDR.side"));
-            //var test = seleniumTest.Tests.FirstOrDefault();
+            //var test = seleniumTest.Recorders.FirstOrDefault();
             //var url = seleniumTest.Url;
 
             //var chromeOptions = new ChromeOptions {

@@ -17,36 +17,10 @@ namespace SeleniumRecorder.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AWAIT.DAL.EventModel", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
-
-                    b.Property<string>("EventType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TargetEventTargetId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("TargetEventTargetId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("Events", (string)null);
-                });
 
             modelBuilder.Entity("AWAIT.DAL.EventPropertyTargetModel", b =>
                 {
@@ -69,6 +43,34 @@ namespace SeleniumRecorder.Migrations
                     b.HasIndex("TargetModelTargetId");
 
                     b.ToTable("EPTs", (string)null);
+                });
+
+            modelBuilder.Entity("AWAIT.DAL.RecorderModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RecorderDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecorderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecorderStartUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecorderWebDriver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SuitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Recorders", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.SuitModel", b =>
@@ -141,35 +143,30 @@ namespace SeleniumRecorder.Migrations
                     b.ToTable("TargetTypes", (string)null);
                 });
 
-            modelBuilder.Entity("AWAIT.DAL.TestModel", b =>
+            modelBuilder.Entity("AWAIT.DAL.TestEventModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("EventId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
 
-                    b.Property<int>("SuitId")
+                    b.Property<string>("EventType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecorderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TestDescription")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("TargetEventTargetId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TestName")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("EventId");
 
-                    b.Property<string>("TestType")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("RecorderId");
 
-                    b.Property<string>("TestUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("TargetEventTargetId");
 
-                    b.Property<string>("TestWebDriver")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tests", (string)null);
+                    b.ToTable("TestEvents", (string)null);
                 });
 
             modelBuilder.Entity("AWAIT.DAL.UserModel", b =>
@@ -197,26 +194,9 @@ namespace SeleniumRecorder.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("AWAIT.DAL.EventModel", b =>
-                {
-                    b.HasOne("AWAIT.DAL.TargetModel", "TargetEvent")
-                        .WithMany()
-                        .HasForeignKey("TargetEventTargetId");
-
-                    b.HasOne("AWAIT.DAL.TestModel", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TargetEvent");
-
-                    b.Navigation("Test");
-                });
-
             modelBuilder.Entity("AWAIT.DAL.EventPropertyTargetModel", b =>
                 {
-                    b.HasOne("AWAIT.DAL.EventModel", "EventTarget")
+                    b.HasOne("AWAIT.DAL.TestEventModel", "EventTarget")
                         .WithMany()
                         .HasForeignKey("EventTargetEventId");
 
@@ -245,6 +225,23 @@ namespace SeleniumRecorder.Migrations
                     b.HasOne("AWAIT.DAL.TargetModel", null)
                         .WithMany("Targets")
                         .HasForeignKey("TargetModelTargetId");
+                });
+
+            modelBuilder.Entity("AWAIT.DAL.TestEventModel", b =>
+                {
+                    b.HasOne("AWAIT.DAL.RecorderModel", "Recorder")
+                        .WithMany()
+                        .HasForeignKey("RecorderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AWAIT.DAL.TargetModel", "TargetEvent")
+                        .WithMany()
+                        .HasForeignKey("TargetEventTargetId");
+
+                    b.Navigation("Recorder");
+
+                    b.Navigation("TargetEvent");
                 });
 
             modelBuilder.Entity("AWAIT.DAL.TargetModel", b =>
