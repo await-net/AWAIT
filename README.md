@@ -1,2 +1,5 @@
 # AWAIT - AUTOMATED WEB-APP INTEGRATED TESTING
-<p>Revolutionizing Software Quality: AWAIT's Next-Gen Automated Web Application Integration Testing Solutions</p>
+<p><em>Revolutionizing Software Quality:</em>
+<p>AWAIT's Next-Gen Automated Web Application Integration Testing Solutions</p>
+</p> 
+
